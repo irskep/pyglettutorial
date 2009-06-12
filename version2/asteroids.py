@@ -36,7 +36,7 @@ def update(dt):
         obj.update(dt)
 
 if __name__ == "__main__":
-    # Get the update() function to run 30 times a second
+    # Get the update() function to run as often as possible
     pyglet.clock.schedule(update)
     
     # Tell pyglet to do its thing

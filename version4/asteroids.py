@@ -72,7 +72,7 @@ def update(dt):
     game_objects.extend(to_add)
 
 if __name__ == "__main__":
-    # Get the update() function to run 30 times a second
+    # Get the update() function to run as often as possible
     pyglet.clock.schedule(update)
     
     # Tell pyglet to do its thing
