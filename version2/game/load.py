@@ -1,4 +1,4 @@
-import pyglet, random
+import pyglet, math, random
 import physicalobject, resources
 
 def distance(point_1=(0, 0), point_2=(0, 0)):
