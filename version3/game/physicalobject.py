@@ -42,7 +42,7 @@ class PhysicalObject(pyglet.sprite.Sprite):
         """Determine if this object collides with another"""
         
         # Calculate distance between object centers that would be a collision,
-        # assuming square images
+        # assuming square resources
         collision_distance = self.image.width/2 + other_object.image.width/2
         
         # Get distance using position tuples

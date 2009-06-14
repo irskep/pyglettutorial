@@ -16,7 +16,7 @@ game_over_label = pyglet.text.Label(text="GAME OVER",
                                     x=400, y=-300, anchor_x='center', 
                                     batch=main_batch, font_size=48)
 
-playership = None
+player_ship = None
 player_lives = []
 score = 0
 num_asteroids = 3
@@ -36,7 +36,7 @@ def init():
     reset_level(2)
 
 def reset_level(num_lives=2):
-    global playership, player_lives, game_objects, event_stack_size
+    global player_ship, player_lives, game_objects, event_stack_size
     
     # Clear the event stack of any remaining handlers from other levels
     while event_stack_size > 0:
@@ -47,16 +47,16 @@ def reset_level(num_lives=2):
         life.delete()
     
     # Initialize the player sprite
-    playership = player.Player(x=400, y=300, batch=main_batch)
+    player_ship = player.Player(x=400, y=300, batch=main_batch)
 
     # Make three sprites to represent remaining lives
     player_lives = load.player_lives(num_lives, main_batch)
     
     # Make some asteroids so we have something to shoot at 
-    asteroids = load.asteroids(num_asteroids, (playership.x, playership.y), main_batch)
+    asteroids = load.asteroids(num_asteroids, (player_ship.x, player_ship.y), main_batch)
 
     # Store all objects that update each frame in a list
-    game_objects = [playership] + asteroids
+    game_objects = [player_ship] + asteroids
 
     # Add any specified event handlers to the event handler stack
     for obj in game_objects:
@@ -65,7 +65,7 @@ def reset_level(num_lives=2):
             event_stack_size += 1
 
 @game_window.event
-def on_draw():
+def on_draw(dt=0):
     game_window.clear()
     main_batch.draw()
 
@@ -111,7 +111,7 @@ def update(dt):
     
     # Get rid of dead objects
     for to_remove in [obj for obj in game_objects if obj.dead]:
-        if to_remove == playership:
+        if to_remove == player_ship:
             player_dead = True
         # If the dying object spawned any new objects, add those to the 
         # game_objects list later
@@ -140,7 +140,7 @@ def update(dt):
             game_over_label.y = 300
     elif victory:
         num_asteroids += 1
-        playership.delete()
+        player_ship.delete()
         score += 10
         reset_level(len(player_lives))
 
@@ -148,8 +148,9 @@ if __name__ == "__main__":
     # Start it up!
     init()
     
-    # Get the update() function to run as often as possible
+    # Get the update() and on_draw() functions to run as often as possible
     pyglet.clock.schedule(update)
+    pyglet.clock.schedule(on_draw)
     
     # Tell pyglet to do its thing
     pyglet.app.run()

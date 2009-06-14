@@ -70,6 +70,9 @@ class Player(physicalobject.PhysicalObject):
         
         # Add it to the list of objects to be added to the game_objects list
         self.new_objects.append(new_bullet)
+        
+        # Play the bullet sound
+        resources.bullet_sound.play()
     
     def collides_with(self, other_object):
         if isinstance(other_object, bullet.Bullet): return False

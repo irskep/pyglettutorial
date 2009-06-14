@@ -12,22 +12,22 @@ level_label = pyglet.text.Label(text="Version 2: Basic Motion",
                                 x=400, y=575, anchor_x='center', batch=main_batch)
 
 # Initialize the player sprite
-playership = player.Player(x=400, y=300, batch=main_batch)
+player_ship = player.Player(x=400, y=300, batch=main_batch)
 
 # Make three sprites to represent remaining lives
 player_lives = load.player_lives(3, main_batch)
 
 # Make three asteroids so we have something to shoot at 
-asteroids = load.asteroids(3, (playership.x, playership.y), main_batch)
+asteroids = load.asteroids(3, (player_ship.x, player_ship.y), main_batch)
 
 # Store all objects that update each frame in a list
-game_objects = [playership] + asteroids
+game_objects = [player_ship] + asteroids
 
 # Tell the main window that the player object responds to events
-game_window.push_handlers(playership)
+game_window.push_handlers(player_ship)
 
 @game_window.event
-def on_draw():
+def on_draw(dt=0):
     game_window.clear()
     main_batch.draw()
 
@@ -36,8 +36,9 @@ def update(dt):
         obj.update(dt)
 
 if __name__ == "__main__":
-    # Get the update() function to run as often as possible
+    # Get the update() and on_draw() functions to run as often as possible
     pyglet.clock.schedule(update)
+    pyglet.clock.schedule(on_draw)
     
     # Tell pyglet to do its thing
     pyglet.app.run()
