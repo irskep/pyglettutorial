@@ -7,7 +7,7 @@ class PhysicalObject(pyglet.sprite.Sprite):
         super(PhysicalObject, self).__init__(*args, **kwargs)
         
         # In addition to position, we have velocity
-        self.vx, self.vy = 0, 0
+        self.vx, self.vy = 0.0, 0.0
     
     def update(self, dt):
         """This method should be called every frame."""
@@ -27,10 +27,10 @@ class PhysicalObject(pyglet.sprite.Sprite):
         max_y = 600 + self.image.height/2
         if self.x < min_x:
             self.x = max_x
+        elif self.x > max_x:
+            self.x = min_x
         if self.y < min_y:
             self.y = max_y
-        if self.x > max_x:
-            self.x = min_x
-        if self.y > max_y:
+        elif self.y > max_y:
             self.y = min_y
     

@@ -8,7 +8,7 @@ class PhysicalObject(pyglet.sprite.Sprite):
         super(PhysicalObject, self).__init__(*args, **kwargs)
         
         # In addition to position, we have velocity
-        self.vx, self.vy = 0, 0
+        self.vx, self.vy = 0.0, 0.0
         
         # And a flag to remove this object from the game_object list
         self.dead = False

@@ -8,7 +8,7 @@ class PhysicalObject(pyglet.sprite.Sprite):
         super(PhysicalObject, self).__init__(*args, **kwargs)
         
         # Velocity
-        self.vx, self.vy = 0, 0
+        self.vx, self.vy = 0.0, 0.0
         
         # Flag to toggle collision with bullets
         self.reacts_to_bullets = True

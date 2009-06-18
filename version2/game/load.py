@@ -8,10 +8,9 @@ def distance(point_1=(0, 0), point_2=(0, 0)):
 def player_lives(num_icons, batch=None):
     """Generate sprites for player life icons"""
     player_lives = []
-    start_x = 800 - 30 * num_icons
     for i in range(num_icons):
         new_sprite = pyglet.sprite.Sprite(img=resources.player_image, 
-                                          x=start_x+i*30, y=585, 
+                                          x=785-i*30, y=585, 
                                           batch=batch)
         new_sprite.scale = 0.5
         player_lives.append(new_sprite)

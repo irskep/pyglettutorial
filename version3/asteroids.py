@@ -27,7 +27,7 @@ game_objects = [player_ship] + asteroids
 game_window.push_handlers(player_ship.key_handler)
 
 @game_window.event
-def on_draw(dt=0):
+def on_draw():
     game_window.clear()
     main_batch.draw()
 
@@ -58,9 +58,8 @@ def update(dt):
         game_objects.remove(to_remove)
 
 if __name__ == "__main__":
-    # Get the update() and on_draw() functions to run as often as possible
-    pyglet.clock.schedule(update)
-    pyglet.clock.schedule(on_draw)
+    # Update the game 120 times per second
+    pyglet.clock.schedule_interval(update, 1/120.0)
     
     # Tell pyglet to do its thing
     pyglet.app.run()

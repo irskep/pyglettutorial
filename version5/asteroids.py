@@ -16,6 +16,8 @@ game_over_label = pyglet.text.Label(text="GAME OVER",
                                     x=400, y=-300, anchor_x='center', 
                                     batch=main_batch, font_size=48)
 
+counter = pyglet.clock.ClockDisplay()
+
 player_ship = None
 player_lives = []
 score = 0
@@ -65,9 +67,10 @@ def reset_level(num_lives=2):
             event_stack_size += 1
 
 @game_window.event
-def on_draw(dt=0):
+def on_draw():
     game_window.clear()
     main_batch.draw()
+    counter.draw()
 
 def update(dt):
     global score, num_asteroids
@@ -148,9 +151,8 @@ if __name__ == "__main__":
     # Start it up!
     init()
     
-    # Get the update() and on_draw() functions to run as often as possible
-    pyglet.clock.schedule(update)
-    pyglet.clock.schedule(on_draw)
+    # Update the game 120 times per second
+    pyglet.clock.schedule_interval(update, 1/120.0)
     
     # Tell pyglet to do its thing
     pyglet.app.run()
