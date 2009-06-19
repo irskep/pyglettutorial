@@ -36,10 +36,10 @@ class Player(physicalobject.PhysicalObject):
             self.vy += force_y
             
             # If thrusting, update the engine sprite
-            self.engine_sprite.visible = True
             self.engine_sprite.rotation = self.rotation
             self.engine_sprite.x = self.x
             self.engine_sprite.y = self.y
+            self.engine_sprite.visible = True
         else:
             # Otherwise, hide it
             self.engine_sprite.visible = False

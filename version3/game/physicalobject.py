@@ -48,10 +48,7 @@ class PhysicalObject(pyglet.sprite.Sprite):
         # Get distance using position tuples
         actual_distance = util.distance(self.position, other_object.position)
         
-        if actual_distance <= collision_distance:
-            return True
-        else:
-            return False
+        return (actual_distance <= collision_distance)
     
     def handle_collision_with(self, other_object):
         self.dead = True
