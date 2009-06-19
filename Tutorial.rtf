@@ -748,7 +748,7 @@ To make the flame draw in the correct position, we could either do some complica
 \f1\fs20 engine_image = pyglet.resource.image("engine_flame.png")
 \f0\fs24 \
 \
-To get the flame to draw behind the player, we need to move the flame image's center to the right, past event the end of the image. To do that, we just set its 
+To get the flame to draw behind the player, we need to move the flame image's center to the right, past the end of the image. To do that, we just set its 
 \f1\fs20 anchor_x
 \f0\fs24  and 
 \f1\fs20 anchor_y
@@ -808,9 +808,7 @@ To make the sprite appear at the player's position, we also need to update its p
 \f1\fs20 Player
 \f0\fs24  instance from the 
 \f1\fs20 game_objects
-\f0\fs24  list is not enough for the 
-\f1\fs20 it
-\f0\fs24  to be removed from the graphics batch. To do that, we need to call its 
+\f0\fs24  list is not enough for it to be removed from the graphics batch. To do that, we need to call its 
 \f1\fs20 delete()
 \f0\fs24  method. Normally a 
 \f1\fs20 Sprite
@@ -945,4 +943,21 @@ The collision handler function is even simpler, since for now we just want every
         self.dead = True
 \f0\fs24 \
 \
-And that's it! You should be able to zip around the screen, engine blazing away. If you hit something, both you and the thing you collided with should disappear from the screen. There's still no game, but we are clearly making progress.}
+And that's it! You should be able to zip around the screen, engine blazing away. If you hit something, both you and the thing you collided with should disappear from the screen. There's still no game, but we are clearly making progress.\
+\
+
+\b\fs48 Part 4: Collision Response
+\fs24 \
+\
+
+\b0 In this section, we'll add bullets. This new feature will require us to start adding things to the 
+\f1\fs20 game_objects
+\f0\fs24  list during the game, as well as have objects check each others' types to make a decision about whether or not they should die.
+\b\fs48 \
+
+\fs36 \
+Writing the Bullet Class
+\fs24 \
+\
+
+\b0 Bullets need to }
