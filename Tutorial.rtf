@@ -1,7 +1,7 @@
 {\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf460
 {\fonttbl\f0\fnil\fcharset0 LucidaGrande;\f1\fnil\fcharset0 Monaco;}
 {\colortbl;\red255\green255\blue255;}
-\vieww12240\viewh15840\viewkind1
+\vieww10340\viewh17040\viewkind0
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
 \f0\b\fs48 \cf0 Intro
@@ -119,7 +119,9 @@ To access these images from
 \f1\fs20 asteroids.py
 \f0\fs24 , we need to use something like 
 \f1\fs20 from game import resources
-\f0\fs24 .
+\f0\fs24 .\
+\
+Note that zero degrees points directly to the right in pyglet, so the images are all drawn with their front pointing to the right.
 \b\fs48 \
 
 \fs36 \
@@ -133,7 +135,7 @@ It's easy to make a text label in pyglet:\
 \
 
 \f1\fs20 score_label = pyglet.text.Label(text="Score: 0", x=10, y=575)\
-level_label = pyglet.text.Label(text="Version 1: Static Graphics", \
+level_label = pyglet.text.Label(text="My Amazing Game", \
                                 x=400, y=575, anchor_x='center')
 \f0\fs24 \
 \
@@ -651,4 +653,296 @@ Now we need to tell pyglet that
 \f1\fs20 game_window.push_handlers(player_ship)
 \f0\fs24 \
 \
-That's it! Now you should be able to run the game and move the player with the arrow keys.}
+That's it! Now you should be able to run the game and move the player with the arrow keys.\
+\
+
+\b\fs48 Part 3: Giving the Player Something to Do
+\fs24 \
+\
+
+\b0 In any good game, there needs to be something working against the player. In the case of Asteroids, it's the threat of collision with, well, an asteroid. Collision detection requires a lot of infrastructure in the code, so this section will focus on making it work. We'll also clean up the player class and show some visual feedback for thrusting.
+\b\fs48 \
+
+\fs36 \
+Simplifying Player Input
+\fs24 \
+\
+
+\b0 Right now, the 
+\f1\fs20 Player
+\f0\fs24  class handles all of its own keyboard events. It spends 13 lines of code doing nothing but setting boolean values in a dictionary. One would think that there would be a better way, and there is: 
+\f1\fs20 pyglet.window.key.KeyStateHandler
+\f0\fs24 . This handy class automatically does what we have been doing manually: it tracks the state of every key on the keyboard.\
+\
+To start using it, we need to initialize it and push it onto the event stack instead of the 
+\f1\fs20 Player
+\f0\fs24  class. First, let's add it to 
+\f1\fs20 Player
+\f0\fs24 's constructor:\
+\
+
+\f1\fs20         self.key_handler = pyglet.window.key.KeyStateHandler()
+\f0\fs24 \
+\
+We also need to push the 
+\f1\fs20 key_handler
+\f0\fs24  object onto the event stack instead of the 
+\f1\fs20 Player
+\f0\fs24  in 
+\f1\fs20 asteroids.py
+\f0\fs24 :\
+\
+
+\f1\fs20 game_window.push_handlers(player_ship.key_handler)
+\f0\fs24 \
+\
+Since 
+\f1\fs20 Player
+\f0\fs24  now relies on 
+\f1\fs20 key_handler
+\f0\fs24  to read the keyboard, we need to change the 
+\f1\fs20 update()
+\f0\fs24  method to use it. The only changes are in the 
+\f1\fs20 if
+\f0\fs24  conditions:\
+\
+
+\f1\fs20         if self.key_handler[key.LEFT]:\
+            ...\
+        if self.key_handler[key.RIGHT]:\
+            ...\
+        \
+        if self.key_handler[key.UP]:\
+            ...
+\f0\fs24 \
+\
+It's just that simple. If you need to see a list of key constants, you can check the API documentation under 
+\f1\fs20 pyglet.window.key
+\f0\fs24 .\
+\
+
+\b\fs36 Adding an Engine Flame
+\fs24 \
+\
+
+\b0 Without visual feedback, it can be difficult to tell if the ship is actually thrusting forward or not, especially for an observer just watching someone else play the game. One way to provide visual feedback is to show an engine flame behind the player while the player is thrusting.\
+\
+
+\b Loading the Frame Image\
+
+\b0 The player will now be made of two sprites. There's nothing preventing us from letting a 
+\f1\fs20 Sprite
+\f0\fs24  own another 
+\f1\fs20 Sprite
+\f0\fs24 , so we'll just give 
+\f1\fs20 Player
+\f0\fs24  an 
+\f1\fs20 engine_sprite
+\f0\fs24  attribute and update it every frame. For our purposes, this approach will be the simplest and most scalable.\
+\
+To make the flame draw in the correct position, we could either do some complicated math every frame, or we could just move the image's anchor point. First, load the image in 
+\f1\fs20 resources.py
+\f0\fs24 :\
+\
+
+\f1\fs20 engine_image = pyglet.resource.image("engine_flame.png")
+\f0\fs24 \
+\
+To get the flame to draw behind the player, we need to move the flame image's center to the right, past event the end of the image. To do that, we just set its 
+\f1\fs20 anchor_x
+\f0\fs24  and 
+\f1\fs20 anchor_y
+\f0\fs24  attributes:\
+\
+
+\f1\fs20 engine_image.anchor_x = engine_image.width * 1.5\
+engine_image.anchor_y = engine_image.height / 2
+\f0\fs24 \
+\
+Now the image is ready to be used by the player class.\
+\
+
+\b Creating and Drawing the Flame\
+
+\b0 The engine sprite needs to be initialized with all the same arguments as 
+\f1\fs20 Player
+\f0\fs24 , except that it needs a different image and must be initially invisible. The code for creating it is very straightforward:\
+\
+
+\f1\fs20         self.engine_sprite = pyglet.sprite.Sprite(img=resources.engine_image, \
+                                                  *args, **kwargs)\
+        self.engine_sprite.visible = False
+\f0\fs24 \
+\
+To make the engine sprite appear only while the player is thrusting, we need to add some logic to the if 
+\f1\fs20 self.key_handler[key.UP]
+\f0\fs24  block in the 
+\f1\fs20 update()
+\f0\fs24  method.\
+\
+
+\f1\fs20         if self.key_handler[key.UP]:\
+            ...\
+            self.engine_sprite.visible = True\
+        else:\
+            self.engine_sprite.visible = False
+\f0\fs24 \
+\
+To make the sprite appear at the player's position, we also need to update its position and rotation attributes:\
+\
+
+\f1\fs20         if self.key_handler[key.UP]:\
+            ...\
+            self.engine_sprite.rotation = self.rotation\
+            self.engine_sprite.x = self.x\
+            self.engine_sprite.y = self.y\
+            self.engine_sprite.visible = True\
+        else:\
+            self.engine_sprite.visible = False
+\f0\fs24 \
+\
+
+\b Cleaning Up After Death\
+
+\b0 When the player is inevitably smashed to bits by an asteroid, he will disappear from the screen. However, simply removing the 
+\f1\fs20 Player
+\f0\fs24  instance from the 
+\f1\fs20 game_objects
+\f0\fs24  list is not enough for the 
+\f1\fs20 it
+\f0\fs24  to be removed from the graphics batch. To do that, we need to call its 
+\f1\fs20 delete()
+\f0\fs24  method. Normally a 
+\f1\fs20 Sprite
+\f0\fs24 's own 
+\f1\fs20 delete()
+\f0\fs24  method will work fine without modifications, but our subclass has its own 
+\f1\fs20 Sprite
+\f0\fs24  which must also be deleted when the 
+\f1\fs20 Player
+\f0\fs24  instance is deleted. To get both to die gracefully, we must write a simple 
+\f1\fs20 delete()
+\f0\fs24  method:\
+\
+
+\f1\fs20     def delete(self):\
+        self.engine_sprite.delete()\
+        super(Player, self).delete()
+\f0\fs24 \
+\
+The 
+\f1\fs20 Player
+\f0\fs24  class is now cleaned up and ready to go.\
+\
+
+\b\fs36 Building Up the Infrastructure
+\fs24 \
+\
+
+\b0 To make objects disappear from the screen, we'll need to manipulate the 
+\f1\fs20 game_objects
+\f0\fs24  list. Every object will need to check every other object's position against its own, and each object will have to decide whether or not it should be removed from the list. The game loop will then check for dead objects and remove them from the list.\
+\
+
+\b Checking All Object Pairs\
+
+\b0 We need to check every object against every other object. The simplest method is to use nested loops. This method will be inefficient for a large number of objects*, but it will work for our purposes. We can use one easy optimization and avoid checking the same pair of objects twice. Here's the setup for the loops:\
+\
+* A better technique is spatial hashing, but if you reach the point where you need to use that, you should probably be using a C-based physics engine anyway.\
+\
+
+\f1\fs20     for i in xrange(len(game_objects)):\
+        for j in xrange(i+1, len(game_objects)):\
+            obj_1 = game_objects[i]\
+            obj_2 = game_objects[j]
+\f0\fs24 \
+\
+We'll need a way to check if an object has already been killed. We could go over to 
+\f1\fs20 PhysicalObject
+\f0\fs24  right now and put it in, but let's keep working on the game loop and implement the attribute in the class later. For now, we'll just assume that everything in 
+\f1\fs20 game_objects
+\f0\fs24  has a 
+\f1\fs20 dead
+\f0\fs24  attribute which will be 
+\f1\fs20 False
+\f0\fs24  until the class sets it to 
+\f1\fs20 True
+\f0\fs24 , at which point it will be ignored and eventually removed from the list.\
+\
+To perform the actual check, we'll also need to call two more methods that don't exist yet. One method will determine if the two objects actually collide, and the other method will give each object an opportunity to respond to the collision. The checking code itself is easy to understand, so I won't bother you with further explanations:\
+\
+
+\f1\fs20             if not obj_1.dead and not obj_2.dead:\
+                if obj_1.collides_with(obj_2):\
+                    obj_1.handle_collision_with(obj_2)\
+                    obj_2.handle_collision_with(obj_1)
+\f0\fs24 \
+\
+Now all that remains is for us to go through the list and remove dead objects. The code to do that is also simple:\
+\
+
+\f1\fs20     for to_remove in [obj for obj in game_objects if obj.dead]:\
+        to_remove.delete()\
+        game_objects.remove(to_remove)
+\f0\fs24 \
+\
+As you can see, it simply calls the object's 
+\f1\fs20 delete()
+\f0\fs24  method to remove it from any batches, then it removes it from the list. If you haven't used list comprehensions much, the above code might look like it's removing objects from the list while traversing it. Fortunately, the list comprehension is evaluated before the loop actually runs, so there should be no problems.\
+\
+
+\b Implementing the Collision Functions
+\b0 \
+We need to add three things to the 
+\f1\fs20 PhysicalObject
+\f0\fs24  class: the 
+\f1\fs20 dead
+\f0\fs24  attribute, the 
+\f1\fs20 collides_with()
+\f0\fs24  method, and the 
+\f1\fs20 handle_collision_with()
+\f0\fs24  method. The 
+\f1\fs20 collides_with()
+\f0\fs24  method will need to use the 
+\f1\fs20 distance()
+\f0\fs24  function, so let's start by moving that function into its own module, called 
+\f1\fs20 util.py
+\f0\fs24 :\
+\
+
+\f1\fs20 import pyglet, math\
+\
+def distance(point_1=(0, 0), point_2=(0, 0)):\
+    return math.sqrt((point_1[0]-point_2[0])**2+(point_1[1]-point_2[1])**2)
+\f0\fs24 \
+\
+Remember to 
+\f1\fs20 import util
+\f0\fs24  in 
+\f1\fs20 load.py
+\f0\fs24 . Now we can write 
+\f1\fs20 PhysicalObject.collides_with()
+\f0\fs24  without duplicating code.\
+\
+Some fancy-pants games use polygon-based or even pixel-perfect collision detection, but this ain't one of those high-falutin' triple-A games, so we'll just pretend everything is shaped like a circle with a radius of half the image width. Circle-to-circle collision detection is very simple: if the centers of the two objects are closer than 
+\f1\fs20 radius_1 + radius_2
+\f0\fs24 , then they are overlapping. Knowing this, we can write the 
+\f1\fs20 collides_with()
+\f0\fs24  method:\
+\
+
+\f1\fs20     def collides_with(self, other_object):\
+        collision_distance = self.image.width/2 + other_object.image.width/2\
+        actual_distance = util.distance(self.position, other_object.position)\
+        \
+        return (actual_distance <= collision_distance)
+\f0\fs24 \
+\
+The collision handler function is even simpler, since for now we just want every object to die as soon as it touches another object:\
+\
+
+\f1\fs20     def handle_collision_with(self, other_object):\
+        self.dead = True
+\f0\fs24 \
+\
+And that's it! You should be able to zip around the screen, engine blazing away. If you hit something, both you and the thing you collided with should disappear from the screen. There's still no game, but we are clearly making progress.}
