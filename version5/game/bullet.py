@@ -18,13 +18,6 @@ class Bullet(physicalobject.PhysicalObject):
         
         if not other_object.reacts_to_bullets:
             return False
-        
-        return super(Bullet, self).collides_with(other_object)
-    
-    def handle_collision_with(self, other_object):
-        # Make this bullet invisible
-        self.visible = False
-        
-        # Set flag to remove from game_object list
-        self.dead = True
+        else:
+            return super(Bullet, self).collides_with(other_object)
     

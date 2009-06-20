@@ -18,6 +18,6 @@ class Bullet(physicalobject.PhysicalObject):
         
         if not other_object.reacts_to_bullets:
             return False
-        
-        return super(Bullet, self).collides_with(other_object)
+        else:
+            return super(Bullet, self).collides_with(other_object)
     

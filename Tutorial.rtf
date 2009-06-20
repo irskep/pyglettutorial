@@ -624,7 +624,7 @@ First, we convert the angle to radians so that
 \f1\fs20 math.cos()
 \f0\fs24  and 
 \f1\fs20 math.sin()
-\f0\fs24  will get the correct values. Then we apply some simple physics to modify the ship's X and Y velocity components.\
+\f0\fs24  will get the correct values. Then we apply some simple physics to modify the ship's X and Y velocity components and push the ship in the right direction.\
 \
 We now have a complete 
 \f1\fs20 Player
@@ -1087,4 +1087,247 @@ Now we need to tell pyglet to call it after half a second or so. We can do this 
 \
 There's still more work to be done on the 
 \f1\fs20 Bullet
-\f0\fs24  class, but before we do any more work on the class itself, let's get them on the screen.}
+\f0\fs24  class, but before we do any more work on the class itself, let's get them on the screen.\
+\
+
+\b Firing Bullets\
+
+\b0 The 
+\f1\fs20 Player
+\f0\fs24  class will be the only class that fires bullets, so let's open it up, import the 
+\f1\fs20 bullet
+\f0\fs24  module, and add a 
+\f1\fs20 bullet_speed
+\f0\fs24  attribute in its constructor:\
+\
+
+\f1\fs20 ...\
+import bullet\
+\
+class Player(physicalobject.PhysicalObject):\
+    def __init__(self, *args, **kwargs):\
+        super(Player, self).__init__(img=resources.player_image, *args, **kwargs)\
+        ....\
+        self.bullet_speed = 700.0
+\f0\fs24 \
+\
+Now we can write the code to create a new bullet and send it hurling off into space. First, we need to resurrect the 
+\f1\fs20 on_key_press()
+\f0\fs24  event handler:\
+\
+
+\f1\fs20     def on_key_press(self, symbol, modifiers):\
+        if symbol == key.SPACE:\
+            self.fire()
+\f0\fs24 \
+\
+The 
+\f1\fs20 fire()
+\f0\fs24  method itself will be a bit more complicated. Most of the calculations will be very similar to the ones for thrusting, but there will be some differences. We'll need to spawn the bullet out at the nose of the ship, not at its center. We'll also need to add the ship's existing velocity to the bullet's new velocity, or the bullets will end up going slower than the ship if the player gets going fast enough.\
+\
+As usual, convert to radians and reverse the direction:\
+\
+
+\f1\fs20     def fire(self):\
+        angle_radians = -math.radians(self.rotation)\
+
+\f0\fs24 \
+Next, calculate the bullet's position and instantiate it:\
+\
+
+\f1\fs20         ship_radius = self.image.width/2\
+        bullet_x = self.x + math.cos(angle_radians) * ship_radius\
+        bullet_y = self.y + math.sin(angle_radians) * ship_radius\
+        new_bullet = bullet.Bullet(bullet_x, bullet_y, batch=self.batch)
+\f0\fs24 \
+\
+Set its velocity using almost the same equations:\
+\
+
+\f1\fs20         bullet_vx = self.vx + math.cos(angle_radians) * self.bullet_speed\
+        bullet_vy = self.vy + math.sin(angle_radians) * self.bullet_speed\
+        new_bullet.vx, new_bullet.vy = bullet_vx, bullet_vy
+\f0\fs24 \
+\
+Finally, add it to the 
+\f1\fs20 new_objects
+\f0\fs24  list so that the main loop will pick it up and add it to 
+\f1\fs20 game_objects
+\f0\fs24 .\
+\
+
+\f1\fs20         self.new_objects.append(new_bullet)
+\f0\fs24 \
+\
+At this point, you should be able to fire bullets using the space bar, and asteroids should disappear when hit. There's just one problem: if you manage to shoot yourself through some clever (or accidental) maneuvering, you'll disappear too. You may  have noticed earlier that asteroids also disappear when they touch each other. To fix this problem, we'll need to start customizing each class's 
+\f1\fs20 handle_collision_with()
+\f0\fs24  method.\
+\
+
+\b\fs36 Customizing Collision Behavior
+\fs24 \
+\
+
+\b0 There are five kinds of collisions in the current version of the game: bullet-asteroid, bullet-player, asteroid-player, bullet-bullet, and asteroid-asteroid. There would be many more in a more complex game.\
+\
+In general, objects of the same type should not be destroyed when they collide, so we can generalize that behavior in 
+\f1\fs20 PhysicalObject
+\f0\fs24 . Other interactions will require a little more work.
+\b \
+\
+Letting Twins Ignore Each Other\
+
+\b0 To let two asteroids or two bullets pass each other by without a word of acknowledgement (or a dramatic explosion), we just need to check if their classes are equal in the 
+\f1\fs20 PhysicalObject.handle_collision_with()
+\f0\fs24  method:\
+\
+
+\f1\fs20     def handle_collision_with(self, other_object):\
+        if other_object.__class__ == self.__class__:\
+            self.dead = False\
+        else:\
+            self.dead = True
+\f0\fs24 \
+\
+
+\b Customizing Bullet Collisions\
+
+\b0 Since bullet collision behavior can vary so wildly across objects, let's add a 
+\f1\fs20 reacts_to_bullets
+\f0\fs24  attribute to 
+\f1\fs20 PhysicalObjects
+\f0\fs24  which the 
+\f1\fs20 Bullet
+\f0\fs24  class can check to determine if it should register a collision or not.\
+\
+First, initialize the 
+\f1\fs20 reacts_to_bullets
+\f0\fs24  attribute to 
+\f1\fs20 True
+\f0\fs24  in the 
+\f1\fs20 PhysicalObject
+\f0\fs24  constructor.\
+\
+
+\f1\fs20     def __init__(self, *args, **kwargs):\
+        ...\
+        self.reacts_to_bullets = True\
+        ...
+\f0\fs24 \
+\
+Now override the 
+\f1\fs20 Bullet.collides_with()
+\f0\fs24  method to only call the 
+\f1\fs20 PhysicalObject
+\f0\fs24  class's 
+\f1\fs20 collides_with()
+\f0\fs24  method if the other object reacts to bullets.\
+\
+
+\f1\fs20     def collides_with(self, other_object):\
+        if not other_object.reacts_to_bullets:\
+            return False\
+        else:\
+            return super(Bullet, self).collides_with(other_object)
+\f0\fs24 \
+\
+The 
+\f1\fs20 Bullet
+\f0\fs24  class is now completely finished! Now let's make something happen when a bullet hits an asteroid.\
+\
+
+\b\fs36 Making Asteroids Explode
+\fs24 \
+\
+
+\b0 Asteroids is challenging to players because every time you shoot an asteroid, it turns into more asteroids. We need to mimic that behavior if we want our game to be any fun. We've already done most of the hard parts. All that remains is to make another subclass of 
+\f1\fs20 PhysicalObject
+\f0\fs24  and write a custom 
+\f1\fs20 handle_collision_with()
+\f0\fs24  method, along with a couple of maintenance tweaks.\
+\
+
+\b Writing the Asteroid Class\
+
+\b0 Create a new module called 
+\f1\fs20 asteroid.py
+\f0\fs24 . Write the usual constructor to pass a specific image to the superclass, passing along any other parameters.\
+\
+
+\f1\fs20 class Asteroid(physicalobject.PhysicalObject):\
+    def __init__(self, *args, **kwargs):\
+        super(Asteroid, self).__init__(resources.asteroid_image, *args, **kwargs)
+\f0\fs24 \
+\
+Now we need to write a new 
+\f1\fs20 handle_collision_with()
+\f0\fs24  method. It should create a random number of new, smaller asteroids with random velocities. However, it should only do that if it's big enough. An asteroid should divide at most twice, and if we scale it down by half each time, then an asteroid should stop dividing when it's 1/4 the size of a new asteroid.\
+\
+We want to keep the old behavior of ignoring other asteroids, so start the method with a call to the superclass's method:\
+\
+
+\f1\fs20     def handle_collision_with(self, other_object):\
+        super(Asteroid, self).handle_collision_with(other_object)
+\f0\fs24 \
+\
+Now we can say that if it's supposed to die, and it's big enough, then we should create two or three new asteroids with random rotations and velocities. We should add the old asteroid's velocity to the new ones to make it look like they come from the same object.\
+\
+
+\f1\fs20         if self.dead and self.scale > 0.25:\
+            num_asteroids = random.randint(2, 3)\
+            for i in xrange(num_asteroids):\
+                new_asteroid = Asteroid(x=self.x, y=self.y, batch=self.batch)\
+                new_asteroid.rotation = random.randint(0, 360)\
+                new_asteroid.vx = random.random()*70 + self.vx\
+                new_asteroid.vy = random.random()*70 + self.vy\
+                new_asteroid.scale = self.scale * 0.5\
+                self.new_objects.append(new_asteroid)
+\f0\fs24 \
+\
+While we're here, let's add a small graphical touch to the asteroids by making them rotate a little. To do that, we'll add a 
+\f1\fs20 rotate_speed
+\f0\fs24  attribute and give it a random value. Then we'll write an 
+\f1\fs20 update()
+\f0\fs24  method to apply that rotation every frame.\
+\
+Add the attribute in the constructor:\
+\
+
+\f1\fs20     def __init__(self, *args, **kwargs):\
+        super(Asteroid, self).__init__(resources.asteroid_image, *args, **kwargs)\
+        self.rotate_speed = random.random() * 100.0 - 50.0
+\f0\fs24 \
+\
+Then write the 
+\f1\fs20 update()
+\f0\fs24  method:\
+\
+
+\f1\fs20     def update(self, dt):\
+        super(Asteroid, self).update(dt)\
+        self.rotation += self.rotate_speed * dt
+\f0\fs24 \
+\
+The only thing left is for us to change the code to create the asteroids when the game starts. Go over to 
+\f1\fs20 load.py
+\f0\fs24  and have the 
+\f1\fs20 asteroid()
+\f0\fs24  method create a new 
+\f1\fs20 Asteroid
+\f0\fs24  instead of a 
+\f1\fs20 PhysicalObject
+\f0\fs24 .\
+\
+
+\f1\fs20 def asteroids(num_asteroids, player_position, batch):\
+    ...\
+    for i in range(num_asteroids):\
+        ...\
+        new_asteroid = asteroid.Asteroid(x=asteroid_x, y=asteroid_y, batch=batch)\
+        ...\
+    return asteroids
+\f0\fs24 \
+\
+Now we're looking at something resembling a game. There are just a few more things left to do before we can pat ourselves on the back.\
+\
+}

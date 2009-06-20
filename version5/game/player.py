@@ -59,8 +59,9 @@ class Player(physicalobject.PhysicalObject):
         angle_radians = -math.radians(self.rotation)
         
         # Create a new bullet just in front of the player
-        bullet_x = self.x + math.cos(angle_radians) * self.image.width/2
-        bullet_y = self.y + math.sin(angle_radians) * self.image.width/2
+        ship_radius = self.image.width/2
+        bullet_x = self.x + math.cos(angle_radians) * ship_radius
+        bullet_y = self.y + math.sin(angle_radians) * ship_radius
         new_bullet = bullet.Bullet(bullet_x, bullet_y, batch=self.batch)
         
         # Give it some speed
