@@ -54,8 +54,7 @@ class PhysicalObject(pyglet.sprite.Sprite):
         
         # Calculate distance between object centers that would be a collision,
         # assuming square resources
-        collision_distance = self.image.width*0.5*self.scale
-        collision_distance += other_object.image.width*0.5*other_object.scale
+        collision_distance = self.image.width/2 + other_object.image.width/2
         
         # Get distance using position tuples
         actual_distance = util.distance(self.position, other_object.position)

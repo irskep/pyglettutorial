@@ -1,7 +1,7 @@
 {\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf460
 {\fonttbl\f0\fnil\fcharset0 LucidaGrande;\f1\fnil\fcharset0 Monaco;}
 {\colortbl;\red255\green255\blue255;}
-\vieww10340\viewh17040\viewkind0
+\vieww10300\viewh15100\viewkind0
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
 \f0\b\fs48 \cf0 Intro
@@ -759,7 +759,9 @@ To get the flame to draw behind the player, we need to move the flame image's ce
 engine_image.anchor_y = engine_image.height / 2
 \f0\fs24 \
 \
-Now the image is ready to be used by the player class.\
+Now the image is ready to be used by the player class. If you're still confused about anchor points, experiment with the values for 
+\f1\fs20 engine_image
+\f0\fs24 's anchor point when you finish this section.\
 \
 
 \b Creating and Drawing the Flame\
@@ -952,12 +954,137 @@ And that's it! You should be able to zip around the screen, engine blazing away.
 
 \b0 In this section, we'll add bullets. This new feature will require us to start adding things to the 
 \f1\fs20 game_objects
-\f0\fs24  list during the game, as well as have objects check each others' types to make a decision about whether or not they should die.
-\b\fs48 \
-
-\fs36 \
-Writing the Bullet Class
-\fs24 \
+\f0\fs24  list during the game, as well as have objects check each others' types to make a decision about whether or not they should die.\
 \
 
-\b0 Bullets need to }
+\b\fs36 Adding Objects During Play
+\fs24 \
+\
+How?\
+
+\b0 We handled object removal with a boolean flag. Adding objects will be a little bit more complicated. For one thing, an object can't just say "Add me to the list!" It has to come from somewhere. For another thing, an object might want to add more than one other object at a time.\
+\
+There are a few ways to solve this problem. To avoid circular references, keep our constructors nice and short, and avoid adding extra modules, we'll have each object keep a list of new child objects to be added to 
+\f1\fs20 game_objects
+\f0\fs24 .\
+\
+
+\b Tweaking the Game Loop\
+
+\b0 The simplest way to check objects for children and add those children to the list is to add a single line of code to the 
+\f1\fs20 game_objects
+\f0\fs24  loop. Note that we haven't implemented the 
+\f1\fs20 new_objects
+\f0\fs24  attribute yet, but when we do, it will be a list of objects to add.\
+\
+
+\f1\fs20     for obj in game_objects:\
+        obj.update(dt)\
+        game_objects.extend(obj.new_objects)\
+        obj.new_objects = []
+\f0\fs24 \
+\
+Unfortunately, this simple solution is problematic. It's generally a bad idea to modify a list while iterating over it. The fix is to simply add new objects to a separate list, then add the objects in the separate list to 
+\f1\fs20 game_objects
+\f0\fs24  after we have finished iterating over it.\
+\
+Declare a 
+\f1\fs20 to_add
+\f0\fs24  list above the loop and add new objects to it instead. At the very bottom of 
+\f1\fs20 update()
+\f0\fs24 , after the object removal code, add the objects in 
+\f1\fs20 to_add
+\f0\fs24  to 
+\f1\fs20 game_objects
+\f0\fs24 .\
+\
+
+\f1\fs20     to_add = []\
+    \
+    for obj in game_objects:\
+        obj.update(dt)\
+        to_add.extend(obj.new_objects)\
+        obj.new_objects = []\
+    \
+    ...collision...\
+    \
+    ...removal...\
+    \
+    game_objects.extend(to_add)        
+\f0\fs24 \
+\
+
+\b Putting the Attribute in PhysicalObject\
+
+\b0 As mentioned before, all we have to do is declare a 
+\f1\fs20 new_objects
+\f0\fs24  attribute in the 
+\f1\fs20 PhysicalObject
+\f0\fs24  class:\
+\
+
+\f1\fs20     def __init__(self, *args, **kwargs):\
+        ....\
+        self.new_objects = []
+\f0\fs24 \
+\
+To add a new object, all we have to do is put something in 
+\f1\fs20 new_objects
+\f0\fs24 , and the main loop will see it, add it to the 
+\f1\fs20 game_objects
+\f0\fs24  list, and clear 
+\f1\fs20 new_objects
+\f0\fs24 .\
+
+\b\fs36 \
+Adding Bullets
+\fs24 \
+\
+Writing the Bullet Class\
+
+\b0 For the most part, bullets act like any other 
+\f1\fs20 PhysicalObject
+\f0\fs24 , but they have two differences, at least in this game: they only collide with some objects, and they disappear from the screen after a couple of seconds to prevent the player from flooding the screen with bullets.\
+\
+First, make a new module called 
+\f1\fs20 bullet.py
+\f0\fs24  and start a simple subclass of 
+\f1\fs20 PhysicalObject
+\f0\fs24 . Don't forget to import 
+\f1\fs20 physicalobject
+\f0\fs24  and 
+\f1\fs20 resources
+\f0\fs24 .\
+\
+
+\f1\fs20 class Bullet(physicalobject.PhysicalObject):\
+    """Bullets fired by the player"""\
+    \
+    def __init__(self, *args, **kwargs):\
+        super(Bullet, self).__init__(resources.bullet_image, *args, **kwargs)
+\f0\fs24 \
+\
+To get bullets to disappear after a time, we could keep track of our own 
+\f1\fs20 age
+\f0\fs24  and 
+\f1\fs20 lifespan
+\f0\fs24  attributes, or we could let pyglet do all the work for us. I don't know about you, but I prefer the second option. First, we need to write a function to call at the end of a bullet's life:\
+\
+
+\f1\fs20     def die(self, dt):\
+        self.dead = True
+\f0\fs24 \
+\
+Now we need to tell pyglet to call it after half a second or so. We can do this as soon as the object is initialized by adding a call to 
+\f1\fs20 pyglet.clock.schedule_once()
+\f0\fs24  to the constructor:\
+\
+
+\f1\fs20     def __init__(self, *args, **kwargs):\
+        super(Bullet, self).__init__(resources.bullet_image, *args, **kwargs)\
+        pyglet.clock.schedule_once(self.die, 0.5)
+\f0\fs24 \
+\
+There's still more work to be done on the 
+\f1\fs20 Bullet
+\f0\fs24  class, but before we do any more work on the class itself, let's get them on the screen.}

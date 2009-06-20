@@ -1,22 +1,17 @@
-import physicalobject, resources, util
+import pyglet
+import physicalobject, resources
 
 class Bullet(physicalobject.PhysicalObject):
     """Bullets fired by the player"""
     
     def __init__(self, *args, **kwargs):
-        super(Bullet, self).__init__(*args, **kwargs)
+        super(Bullet, self).__init__(resources.bullet_image, *args, **kwargs)
         
         # Bullets shouldn't stick around forever
-        self.age = 0.0
-        self.lifespan = 0.5
+        pyglet.clock.schedule_once(self.die, 0.5)
     
-    def update(self, dt):
-        # We can measure age simply by adding up the time steps
-        self.age += dt
-        if self.age >= self.lifespan:
-            self.dead = True
-        
-        super(Bullet, self).update(dt)
+    def die(self, dt):
+        self.dead = True
     
     def collides_with(self, other_object):
         """Special collision method, returns False if other_object doesn't care about bullets"""
