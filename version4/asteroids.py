@@ -55,7 +55,6 @@ def update(dt):
     for obj in game_objects:
         obj.update(dt)
         to_add.extend(obj.new_objects)
-        if obj.new_objects: print obj.new_objects
         obj.new_objects = []
     
     # Get rid of dead objects
