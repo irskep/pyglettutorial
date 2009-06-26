@@ -35,14 +35,6 @@ def on_draw():
 
 def update(dt):
     
-    # Let's not modify the list while traversing it
-    to_add = []
-    
-    for obj in game_objects:
-        obj.update(dt)
-        to_add.extend(obj.new_objects)
-        obj.new_objects = []
-    
     # To avoid handling collisions twice, we employ nested loops of ranges.
     # This method also avoids the problem of colliding an object with itself.
     for i in xrange(len(game_objects)):
@@ -56,6 +48,15 @@ def update(dt):
                 if obj_1.collides_with(obj_2):
                     obj_1.handle_collision_with(obj_2)
                     obj_2.handle_collision_with(obj_1)
+    
+    # Let's not modify the list while traversing it
+    to_add = []
+
+    for obj in game_objects:
+        obj.update(dt)
+        to_add.extend(obj.new_objects)
+        if obj.new_objects: print obj.new_objects
+        obj.new_objects = []
     
     # Get rid of dead objects
     for to_remove in [obj for obj in game_objects if obj.dead]:

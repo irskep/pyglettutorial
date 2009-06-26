@@ -78,6 +78,20 @@ def update(dt):
     player_dead = False
     victory = False
     
+    # To avoid handling collisions twice, we employ nested loops of ranges.
+    # This method also avoids the problem of colliding an object with itself.
+    for i in xrange(len(game_objects)):
+        for j in xrange(i+1, len(game_objects)):
+            
+            obj_1 = game_objects[i]
+            obj_2 = game_objects[j]
+            
+            # Make sure the objects haven't already been killed
+            if not obj_1.dead and not obj_2.dead:
+                if obj_1.collides_with(obj_2):
+                    obj_1.handle_collision_with(obj_2)
+                    obj_2.handle_collision_with(obj_1)
+    
     # Let's not modify the list while traversing it
     to_add = []
     
@@ -97,20 +111,6 @@ def update(dt):
     if asteroids_remaining == 0:
         # Don't act on victory until the end of the time step
         victory = True
-    
-    # To avoid handling collisions twice, we employ nested loops of ranges.
-    # This method also avoids the problem of colliding an object with itself.
-    for i in xrange(len(game_objects)):
-        for j in xrange(i+1, len(game_objects)):
-            
-            obj_1 = game_objects[i]
-            obj_2 = game_objects[j]
-            
-            # Make sure the objects haven't already been killed
-            if not obj_1.dead and not obj_2.dead:
-                if obj_1.collides_with(obj_2):
-                    obj_1.handle_collision_with(obj_2)
-                    obj_2.handle_collision_with(obj_1)
     
     # Get rid of dead objects
     for to_remove in [obj for obj in game_objects if obj.dead]:

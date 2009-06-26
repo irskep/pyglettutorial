@@ -990,23 +990,23 @@ Unfortunately, this simple solution is problematic. It's generally a bad idea to
 \
 Declare a 
 \f1\fs20 to_add
-\f0\fs24  list above the loop and add new objects to it instead. At the very bottom of 
+\f0\fs24  list just below the loop and add new objects to it instead. At the very bottom of 
 \f1\fs20 update()
 \f0\fs24 , after the object removal code, add the objects in 
 \f1\fs20 to_add
 \f0\fs24  to 
 \f1\fs20 game_objects
-\f0\fs24 .\
-\
-
-\f1\fs20     to_add = []\
+\f0\fs24 .
+\f1\fs20 \
+    \
+    ...collision...\
+    \
+    to_add = []\
     \
     for obj in game_objects:\
         obj.update(dt)\
         to_add.extend(obj.new_objects)\
         obj.new_objects = []\
-    \
-    ...collision...\
     \
     ...removal...\
     \
@@ -1330,4 +1330,19 @@ The only thing left is for us to change the code to create the asteroids when th
 \
 Now we're looking at something resembling a game. There are just a few more things left to do before we can pat ourselves on the back.\
 \
-}
+
+\b\fs48 Part 5: Bringing it All Together
+\fs24 \
+\
+
+\b0 In this section, we'll add bullets. This new feature will require us to start adding things to the 
+\f1\fs20 game_objects
+\f0\fs24  list during the game, as well as have objects check each others' types to make a decision about whether or not they should die.\
+\
+
+\b\fs36 Adding Objects During Play
+\fs24 \
+\
+How?\
+
+\b0 We handled object removal with a boolean flag. Adding objects will be a little bit more }
