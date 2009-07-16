@@ -15,7 +15,7 @@ level_label = pyglet.text.Label(text="Version 2: Basic Motion",
 player_ship = player.Player(x=400, y=300, batch=main_batch)
 
 # Make three sprites to represent remaining lives
-player_lives = load.player_lives(3, main_batch)
+player_lives = load.player_lives(2, main_batch)
 
 # Make three asteroids so we have something to shoot at 
 asteroids = load.asteroids(3, (player_ship.x, player_ship.y), main_batch)
