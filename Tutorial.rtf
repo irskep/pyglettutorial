@@ -215,7 +215,20 @@ Now when you run
 \f0\fs24 , like so:\
 \
 
-\f1\fs20 player_ship = pyglet.sprite.Sprite(img=resources.player_image, x=400, y=300)
+\f1\fs20 from game import resources\
+...\
+player_ship = pyglet.sprite.Sprite(img=resources.player_image, x=400, y=300)
+\f0\fs24 \
+\
+To get the player to draw on the screen, add a line to 
+\f1\fs20 on_draw()
+\f0\fs24 :\
+\
+
+\f1\fs20 @game_window.event\
+def on_draw():\
+    ...\
+    player_ship.draw()
 \f0\fs24 \
 \
 Loading the asteroids is a little more complicated, since we'll need to place more than one at random locations that don't immediately collide with the player. Let's put the loading code in a new 
@@ -226,7 +239,7 @@ Loading the asteroids is a little more complicated, since we'll need to place mo
 \
 
 \f1\fs20 import pyglet, random\
-from game import resources\
+import resources\
 \
 def asteroids(num_asteroids):\
     asteroids = []\
@@ -252,9 +265,17 @@ All we are doing here is making a few new sprites with random positions. There's
 \
 To check new asteroids agains the player's position, we need to pass the player's position into the 
 \f1\fs20 asteroids()
-\f0\fs24  function and keep regenerating new coordinates until the asteroid is far enough away. Here is the complete function, which requires you to import the 
-\f1\fs20 random
-\f0\fs24  module:\
+\f0\fs24  function and keep regenerating new coordinates until the asteroid is far enough away. Pyglet sprites keep track of their position both as a tuple (
+\f1\fs20 Sprite.position
+\f0\fs24 ) and as 
+\f1\fs20 x
+\f0\fs24  and 
+\f1\fs20 y
+\f0\fs24  attributes (
+\f1\fs20 Sprite.x
+\f0\fs24  and 
+\f1\fs20 Sprite.y
+\f0\fs24 ). To keep our code short, we'll just pass the position tuple into the function.\
 \
 
 \f1\fs20 def asteroids(num_asteroids, player_position):\
@@ -273,19 +294,27 @@ To check new asteroids agains the player's position, we need to pass the player'
 \
 For each asteroid, it chooses random positions until it finds one away from the player, creates the sprite, and gives it a random rotation. Each asteroid is appended to a list, which is returned.\
 \
-To access this function from your main loading code, you need to import the 
-\f1\fs20 load
-\f0\fs24  module with 
-\f1\fs20 from game import load
-\f0\fs24 . Now you can load three asteroids like this:\
+Now you can load three asteroids like this:\
 \
 
-\f1\fs20 asteroids = load.asteroids(3, (player_ship.x, player_ship.y))
+\f1\fs20 from game import resources, load\
+...\
+asteroids = load.asteroids(3, player_ship.position)
 \f0\fs24 \
 \
 The 
 \f1\fs20 asteroids
-\f0\fs24  variable now contains a list of sprites.\
+\f0\fs24  variable now contains a list of sprites. Drawing them on the screen is as simple as it was for the player's ship: just cal their 
+\f1\fs20 draw()
+\f0\fs24  methods.\
+\
+
+\f1\fs20 @game_window.event\
+def on_draw():\
+    ...\
+    for asteroid in asteroids:\
+        asteroid.draw()
+\f0\fs24 \
 \
 
 \b\fs48 Part 2: Basic Motion
