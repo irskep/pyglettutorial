@@ -12,7 +12,7 @@ class Player(physicalobject.PhysicalObject):
         self.thrust = 300.0
         self.rotate_speed = 200.0
         
-        self.keys = dict(left=False, right=False, up=False, down=False)
+        self.keys = dict(left=False, right=False, up=False)
     
     def on_key_press(self, symbol, modifiers):    
         if symbol == key.UP:

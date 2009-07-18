@@ -577,30 +577,41 @@ Now when you run
 
 \b Writing the Player Class
 \b0 \
-In addition to obeying the basic laws of physics, the player object needs to respond to keyboard input. Start by importing the appropriate modules and subclassing PhysicalObject:\
-\
-from pyglet.window import key\
-import physicalobject, resources\
+In addition to obeying the basic laws of physics, the player object needs to respond to keyboard input. Start by creating a 
+\f1\fs20 game.player
+\f0\fs24  module, importing the appropriate modules, and subclassing 
+\f1\fs20 PhysicalObject
+\f0\fs24 :\
 \
 
-\f1\fs20 class Player(physicalobject.PhysicalObject):\
+\f1\fs20 import physicalobject, resources\
+\
+class Player(physicalobject.PhysicalObject):\
     \
     def __init__(self, *args, **kwargs):\
         super(Player, self).__init__(img=resources.player_image, \
                                      *args, **kwargs)\
 
 \f0\fs24 \
-So far, the only difference between a Player and a PhysicalObject is that a Player will always have the same image. But Player objects need a couple more attributes. Since the ship will always thrust with the same force in whatever direction it points, we'll need to define a constant for the magnitude of that force. We should also define a constant for the ship's rotation speed.\
+So far, the only difference between a 
+\f1\fs20 Player
+\f0\fs24  and a 
+\f1\fs20 PhysicalObject
+\f0\fs24  is that a 
+\f1\fs20 Player
+\f0\fs24  will always have the same image. But 
+\f1\fs20 Player
+\f0\fs24  objects need a couple more attributes. Since the ship will always thrust with the same force in whatever direction it points, we'll need to define a constant for the magnitude of that force. We should also define a constant for the ship's rotation speed.\
 \
 
 \f1\fs20         self.thrust = 300.0\
         self.rotate_speed = 200.0
 \f0\fs24 \
 \
-Now we need to get the class to respond to user input. Pyglet uses a polling approach to input, sending key press and key release events to registered event handlers. We need to constantly check if a key is down, and one way we can do that is to maintain a dictionary of keys. First, we need to initialize the dictionary in the constructor:\
+Now we need to get the class to respond to user input. Pyglet uses a polling approach to input, sending key press and key release events to registered event handlers. We will need to constantly check if a key is down, and one way to accomplish that is to maintain a dictionary of keys. First, we need to initialize the dictionary in the constructor:\
         \
 
-\f1\fs20         self.keys = dict(left=False, right=False, up=False, down=False)
+\f1\fs20         self.keys = dict(left=False, right=False, up=False)
 \f0\fs24 \
 \
 Then we need to write two methods, 
