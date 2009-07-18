@@ -13,7 +13,7 @@ level_label = pyglet.text.Label(text="Version 1: Static Graphics",
 player_ship = pyglet.sprite.Sprite(img=resources.player_image, x=400, y=300)
 
 # Make three asteroids so we have something to shoot at 
-asteroids = load.asteroids(3, (player_ship.x, player_ship.y))
+asteroids = load.asteroids(3, player_ship.position)
 
 @game_window.event
 def on_draw():

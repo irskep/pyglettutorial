@@ -55,7 +55,7 @@ def reset_level(num_lives=2):
     player_lives = load.player_lives(num_lives, main_batch)
     
     # Make some asteroids so we have something to shoot at 
-    asteroids = load.asteroids(num_asteroids, (player_ship.x, player_ship.y), main_batch)
+    asteroids = load.asteroids(num_asteroids, player_ship.position, main_batch)
 
     # Store all objects that update each frame in a list
     game_objects = [player_ship] + asteroids

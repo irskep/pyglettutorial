@@ -225,7 +225,10 @@ Loading the asteroids is a little more complicated, since we'll need to place mo
 \f0\fs24 :\
 \
 
-\f1\fs20 def asteroids(num_asteroids):\
+\f1\fs20 import pyglet, random\
+from game import resources\
+\
+def asteroids(num_asteroids):\
     asteroids = []\
     for i in range(num_asteroids):\
         asteroid_x = random.randint(0, 800)\
