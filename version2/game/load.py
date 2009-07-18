@@ -28,6 +28,6 @@ def asteroids(num_asteroids, player_position, batch=None):
                                                      x=asteroid_x, y=asteroid_y,
                                                      batch=batch)
         new_asteroid.rotation = random.randint(0, 360)
-        new_asteroid.vx, new_asteroid.vy = random.random()*40, random.random()*40
+        new_asteroid.velocity_x, new_asteroid.velocity_y = random.random()*40, random.random()*40
         asteroids.append(new_asteroid)
     return asteroids

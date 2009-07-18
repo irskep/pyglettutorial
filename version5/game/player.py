@@ -67,7 +67,7 @@ class Player(physicalobject.PhysicalObject):
         # Give it some speed
         bullet_vx = self.velocity_x + math.cos(angle_radians) * self.bullet_speed
         bullet_vy = self.velocity_y + math.sin(angle_radians) * self.bullet_speed
-        new_bullet.vx, new_bullet.vy = bullet_vx, bullet_vy
+        new_bullet.velocity_x, new_bullet.velocity_y = bullet_vx, bullet_vy
         
         # Add it to the list of objects to be added to the game_objects list
         self.new_objects.append(new_bullet)
