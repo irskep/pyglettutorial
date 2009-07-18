@@ -1,3 +1,4 @@
 *.pyc
 *.ai
 *.DS_Store
+test/**
