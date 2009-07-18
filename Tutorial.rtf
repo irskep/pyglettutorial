@@ -464,9 +464,13 @@ Create a new
 \f1\fs20 game
 \f0\fs24  submodule called 
 \f1\fs20 physicalobject.py
-\f0\fs24  and declare a 
+\f0\fs24  and declare a subclass of 
+\f1\fs20 pyglet.sprite.Sprite
+\f0\fs24  called 
 \f1\fs20 PhysicalObject
-\f0\fs24  class. The only new attributes we'll be adding will store the object's velocity, so the constructor will be simple.\
+\f0\fs24 . The only new property we'll be adding to 
+\f1\fs20 Sprite
+\f0\fs24  will be velocity, which we can represent with two floating point values, one for each dimension.\
 \
 
 \f1\fs20 class PhysicalObject(pyglet.sprite.Sprite):\
