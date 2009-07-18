@@ -621,7 +621,13 @@ Then we need to write two methods,
 \f0\fs24 . When pyglet checks a new event handler, it looks for these two methods, among others.\
 \
 
-\f1\fs20     def on_key_press(self, symbol, modifiers):    \
+\f1\fs20 import math\
+from pyglet.window import key\
+import physicalobject, resources\
+...\
+class Player(physicalobject.PhysicalObject)\
+    ...\
+    def on_key_press(self, symbol, modifiers):    \
         if symbol == key.UP:\
             self.keys['up'] = True\
         elif symbol == key.LEFT:\
@@ -644,7 +650,7 @@ The last thing we need to do is write the
 \f1\fs20 update()
 \f0\fs24  method. It follows the same behavior as a 
 \f1\fs20 PhysicalObject
-\f0\fs24  plus a little extra, so we'll need to call the 
+\f0\fs24  plus a little extra, so we'll need to call 
 \f1\fs20 PhysicalObject
 \f0\fs24 's 
 \f1\fs20 update()
@@ -701,7 +707,9 @@ We now have a complete
 \f0\fs24 :\
 \
 
-\f1\fs20 player_ship = player.Player(x=400, y=300, batch=main_batch)
+\f1\fs20 from game import player\
+...\
+player_ship = player.Player(x=400, y=300, batch=main_batch)
 \f0\fs24 \
 \
 Now we need to tell pyglet that 
