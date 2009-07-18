@@ -531,7 +531,9 @@ As you can see, it simply checks to see if objects are no longer visible on the 
 \f1\fs20 update()
 \f0\fs24 .\
 \
-To make the asteroids use our new motion code, just import the 
+To make the asteroids use our new motion code, we need to modify the 
+\f1\fs20 load.asteroids()
+\f0\fs24  function. Import the 
 \f1\fs20 physicalobject
 \f0\fs24  module and change the "new_asteroid = ..." line to create a new 
 \f1\fs20 PhysicalObject
@@ -576,17 +578,28 @@ The
 \f1\fs20 update()
 \f0\fs24  function takes a 
 \f1\fs20 dt
-\f0\fs24  parameter because it is still not the source of the actual time step.\
+\f0\fs24  parameter because it is not the source of the actual time step. The loop assumes that every object has an 
+\f1\fs20 update()
+\f0\fs24  method, which isn't quite true: the 
+\f1\fs20 player_ship
+\f0\fs24  object is still just a regular sprite. Let's fix that:\
+\
+
+\f1\fs20 from game import physicalobject\
+player_ship = physicalobject.PhysicalObject(...)
+\f0\fs24 \
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
 \b \cf0 Calling the Update Function
 \b0 \
-We need to update the objects at least once per frame. What's a frame? Well, most screens have a maximum refresh rate of 60 hertz. If we set our loop to run at exactly 60 hertz, though, the motion will look a little jerky because it won't match the screen exactly. Instead, we should have it update twice as fast, 120 times per second, to get smooth animation.\
+We need to update the objects at least once per frame. What's a frame? Well, most screens have a maximum refresh rate of 60 hertz. If we set our loop to run at exactly 60 hertz, though, the motion will look a little jerky because it will be slightly out of sync with the screen. Instead, we should have it update twice as fast, 120 times per second, to get smooth animation.\
 \
-Instead of using an actual loop to update the game every frame, we let pyglet call the function at a specified interval, using no more resources than are necessary. The 
+Instead of using a 
+\f1\fs20 while
+\f0\fs24  loop to update the game every frame, we tell pyglet to call the function at a specified interval, using no more resources than are necessary. The 
 \f1\fs20 pyglet.clock
-\f0\fs24  module contains a number of ways to call functions periodically or at some specified time in the future. The one we want is 
+\f0\fs24  module provides a number of ways to call functions periodically or at some specified time in the future. The one we want is 
 \f1\fs20 pyglet.clock.schedule_interval()
 \f0\fs24 :\
 \
@@ -601,7 +614,7 @@ Putting this line above
 \f1\fs20 if __name__ == '__main__'
 \f0\fs24  block tells pyglet to call 
 \f1\fs20 update()
-\f0\fs24  120 times per second. Pyglet will pass in the elapsed time, i.e. 
+\f0\fs24  every 120th of a second. Pyglet will pass the elapsed time, i.e. 
 \f1\fs20 dt
 \f0\fs24 , as the only parameter.\
 \
