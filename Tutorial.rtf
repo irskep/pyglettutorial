@@ -483,7 +483,7 @@ Create a new
 \
 Each object will need to be updated every frame, so let's write an 
 \f1\fs20 update()
-\f0\fs24  method.\
+\f0\fs24  method. The object's position simply needs to have the current velocity added to it.\
 \
 
 \f1\fs20     def update(self, dt):\
@@ -495,9 +495,11 @@ What's
 \f1\fs20 dt
 \f0\fs24 ? It's the 
 \b time step
-\b0 . Game frames are not instantaneous, and they don't always take equal amounts of time. If you've ever tried to play a modern game on an old machine, you know that frame rates can jump all over the place. There are a number of ways to deal with this problem, the simplest one being to just multiply all time-sensitive operations by 
+\b0 . Game frames are not instantaneous, and they don't always take equal amounts of time. If you've ever tried to play a modern game on an old machine, you know that frame rates can jump all over the place. There are a number of ways to deal with this problem, the simplest one being simple multiplication of all time-sensitive operations by 
 \f1\fs20 dt
-\f0\fs24 .\
+\f0\fs24 . If you decide to change your approach later, you can just set 
+\f1\fs20 dt
+\f0\fs24  to some constant.\
 \
 If we give objects a velocity and just let them go, they will fly off the screen before long. Since we're making a version of Asteroids, we would rather they just wrapped around the screen. Here is a simple function that accomplishes this goal:\
 \
