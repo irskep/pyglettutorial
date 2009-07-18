@@ -8,7 +8,7 @@ class PhysicalObject(pyglet.sprite.Sprite):
         super(PhysicalObject, self).__init__(*args, **kwargs)
         
         # In addition to position, we have velocity
-        self.vx, self.vy = 0.0, 0.0
+        self.velocity_x, self.velocity_y = 0.0, 0.0
         
         # And a flag to remove this object from the game_object list
         self.dead = False
@@ -17,8 +17,8 @@ class PhysicalObject(pyglet.sprite.Sprite):
         """This method should be called every frame."""
         
         # Update position according to velocity and time
-        self.x += self.vx * dt
-        self.y += self.vy * dt
+        self.x += self.velocity_x * dt
+        self.y += self.velocity_y * dt
         
         # Wrap around the screen if necessary
         self.check_bounds()

@@ -23,8 +23,8 @@ class Asteroid(physicalobject.PhysicalObject):
             for i in xrange(num_asteroids):
                 new_asteroid = Asteroid(x=self.x, y=self.y, batch=self.batch)
                 new_asteroid.rotation = random.randint(0, 360)
-                new_asteroid.vx = random.random()*70 + self.vx
-                new_asteroid.vy = random.random()*70 + self.vy
+                new_asteroid.vx = random.random()*70 + self.velocity_x
+                new_asteroid.vy = random.random()*70 + self.velocity_y
                 new_asteroid.scale = self.scale * 0.5
                 self.new_objects.append(new_asteroid)
     

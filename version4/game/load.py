@@ -12,7 +12,7 @@ def player_lives(num_icons, batch=None):
         player_lives.append(new_sprite)
     return player_lives
 
-def asteroids(num_asteroids, player_position, batch):
+def asteroids(num_asteroids, player_position, batch=None):
     """Generate asteroid objects with random positions and velocities, not close to the player"""
     asteroids = []
     for i in range(num_asteroids):

@@ -38,8 +38,8 @@ class Player(physicalobject.PhysicalObject):
             angle_radians = -math.radians(self.rotation)
             force_x = math.cos(angle_radians) * self.thrust * dt
             force_y = math.sin(angle_radians) * self.thrust * dt
-            self.vx += force_x
-            self.vy += force_y
+            self.velocity_x += force_x
+            self.velocity_y += force_y
             
             # If thrusting, update the engine sprite
             self.engine_sprite.rotation = self.rotation
@@ -65,8 +65,8 @@ class Player(physicalobject.PhysicalObject):
         new_bullet = bullet.Bullet(bullet_x, bullet_y, batch=self.batch)
         
         # Give it some speed
-        bullet_vx = self.vx + math.cos(angle_radians) * self.bullet_speed
-        bullet_vy = self.vy + math.sin(angle_radians) * self.bullet_speed
+        bullet_vx = self.velocity_x + math.cos(angle_radians) * self.bullet_speed
+        bullet_vy = self.velocity_y + math.sin(angle_radians) * self.bullet_speed
         new_bullet.vx, new_bullet.vy = bullet_vx, bullet_vy
         
         # Add it to the list of objects to be added to the game_objects list

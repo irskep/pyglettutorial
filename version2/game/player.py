@@ -43,6 +43,6 @@ class Player(physicalobject.PhysicalObject):
             angle_radians = -math.radians(self.rotation)
             force_x = math.cos(angle_radians) * self.thrust * dt
             force_y = math.sin(angle_radians) * self.thrust * dt
-            self.vx += force_x
-            self.vy += force_y
+            self.velocity_x += force_x
+            self.velocity_y += force_y
     

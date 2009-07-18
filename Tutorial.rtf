@@ -11,8 +11,9 @@ Why use Python for games?
 \b0 \
 The same reason you use Python for anything else. It's easy, it makes sense, and there are great libraries available.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Speaking of libraries, what's available?
+\b \cf0 Speaking of libraries, what's available?
 \b0 \
  * PyGame\
  * pyglet\
@@ -20,8 +21,9 @@ The same reason you use Python for anything else. It's easy, it makes sense, and
 \
 
 \b Which one should I use?\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 My personal opinion is that pyglet is the cleanest and fastest, but PyGame has also been used to do some cool things. Panda3D is more sophisticated, geared toward 3D, and has a much higher learning curve. I won't go into specifics for now.\
+\b0 \cf0 My personal opinion is that pyglet is the cleanest and fastest, but PyGame has also been used to do some cool things. Panda3D is more sophisticated, geared toward 3D, and has a much higher learning curve. I won't go into specifics for now.\
 \
 To get you familiar with pyglet, I'll walk you through the process of creating a simple version of the classic game Asteroids.\
 \
@@ -31,14 +33,16 @@ To get you familiar with pyglet, I'll walk you through the process of creating a
 \
 The first version of our Asteroids clone will simply show a score of zero, a label showing the name of the program, three randomly placed asteroids, and the player's ship. Nothing will move.
 \b\fs48 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\fs36 \
+\fs36 \cf0 \
 Setting Up
 \fs24 \
 \
 Installing Pyglet\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 Download pyglet from http://pyglet.org/download.html and choose the distribution for your platform. The process is different for each platform, but simple on all of them, since pyglet has no external dependencies.
+\b0 \cf0 Download pyglet from http://pyglet.org/download.html and choose the distribution for your platform. The process is different for each platform, but simple on all of them, since pyglet has no external dependencies.
 \b \
 \
 Setting Up the Files\
@@ -76,8 +80,9 @@ if __name__ == '__main__':\
 \
 When you run the code above, you should see a window full of junk that goes away when you press Esc.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Loading and Displaying an Image
+\b \cf0 Loading and Displaying an Image
 \b0 \
 Let's create a separate submodule of 
 \f1\fs20 game
@@ -87,8 +92,9 @@ Let's create a separate submodule of
 \
 Since our images reside in a directory other than the example's root directory, we need to tell pyglet where to find them:\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\f1\fs20 import pyglet\
+\f1\fs20 \cf0 import pyglet\
 pyglet.resource.path = ['../resources']\
 pyglet.resource.reindex()\
 
@@ -113,13 +119,15 @@ bullet_image = pyglet.resource.image("bullet.png")\
 asteroid_image = pyglet.resource.image("asteroid.png")\
 
 \f0\fs24 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Centering the Images
+\b \cf0 Centering the Images
 \b0 \
 Pyglet will draw all images from their lower left corner by default. We don't want this behavior for our images, which need to rotate around their centers. All we have to do to fix this problem is set their anchor points:\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\f1\fs20 def center_image(image):\
+\f1\fs20 \cf0 def center_image(image):\
     """Sets an image's anchor point to its center"""\
     image.anchor_x = image.width/2\
     image.anchor_y = image.height/2
@@ -145,8 +153,9 @@ To access the images from
 \f1\fs20 from game import resources
 \f0\fs24 , which we'll get into in the next section.
 \b\fs48 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\fs36 \
+\fs36 \cf0 \
 Initializing Objects
 \b0\fs24 \
 \
@@ -159,16 +168,18 @@ To make a text label in pyglet, just initialize a
 \f1\fs20 pyglet.text.Label
 \f0\fs24  object:\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\f1\fs20 score_label = pyglet.text.Label(text="Score: 0", x=10, y=575)\
+\f1\fs20 \cf0 score_label = pyglet.text.Label(text="Score: 0", x=10, y=575)\
 level_label = pyglet.text.Label(text="My Amazing Game", \
                                 x=400, y=575, anchor_x='center')
 \f0\fs24 \
 \
 Notice that the second label is centered using the anchor_x attribute.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Drawing the Labels
+\b \cf0 Drawing the Labels
 \b0 \
 We want pyglet to call a custom function whenever the window is drawn. To make that happen, we need to either subclass 
 \f1\fs20 Window
@@ -178,8 +189,9 @@ We want pyglet to call a custom function whenever the window is drawn. To make t
 \f1\fs20 @Window.event
 \f0\fs24  decorator on a function with the same name:\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\f1\fs20 @game_window.event\
+\f1\fs20 \cf0 @game_window.event\
 def on_draw():\
 	# draw things here\
 
@@ -207,10 +219,12 @@ Now when you run
 \f1\fs20 asteroids.py
 \f0\fs24 , you should get a window with a score of zero in the upper left corner and a centered label reading "Version 1: Static Graphics" at the top of the screen.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Making the Player and Asteroid Sprites\
+\b \cf0 Making the Player and Asteroid Sprites\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 The player should be an instance or subclass of 
+\b0 \cf0 The player should be an instance or subclass of 
 \f1\fs20 pyglet.sprite.Sprite
 \f0\fs24 , like so:\
 \
@@ -253,12 +267,12 @@ def asteroids(num_asteroids):\
     return asteroids
 \f0\fs24 \
 \
-All we are doing here is making a few new sprites with random positions. There's still a problem, though: an asteroid might randomly be placed exactly where the player is, causing immediate death. To fix this issue, we'll need to be able to tell how far away new asteroids are from the player. Here is a simple function to calculate that distance, which requires you to import the 
-\f1\fs20 math
-\f0\fs24  module:\
+All we are doing here is making a few new sprites with random positions. There's still a problem, though: an asteroid might randomly be placed exactly where the player is, causing immediate death. To fix this issue, we'll need to be able to tell how far away new asteroids are from the player. Here is a simple function to calculate that distance:\
 \
 
-\f1\fs20 def distance(point_1=(0, 0), point_2=(0, 0)):\
+\f1\fs20 import math\
+...\
+def distance(point_1=(0, 0), point_2=(0, 0)):\
     """Returns the distance between two points"""\
     return math.sqrt((point_1[0]-point_2[0])**2+(point_1[1]-point_2[1])**2)
 \f0\fs24 \
@@ -323,14 +337,16 @@ def on_draw():\
 
 \b0 In the second version of the example, we'll introduce a simpler, faster way to draw all of the game objects, as well as add row of icons indicating the number of lives left. We'll also write some code to make the player and the asteroids obey the laws of physics.
 \b\fs48 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\fs36 \
+\fs36 \cf0 \
 More Graphics
 \fs24 \
 \
 Drawing with Batches\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 Calling each object's draw() method manually can become cumbersome and tedious if there are many different kinds of objects. Graphics batches simplify drawing by letting you draw all your objects with a single function call. All you need to do is create a batch, pass it into each object you want to draw, and call the batch's 
+\b0 \cf0 Calling each object's draw() method manually can become cumbersome and tedious if there are many different kinds of objects. Graphics batches simplify drawing by letting you draw all your objects with a single function call. All you need to do is create a batch, pass it into each object you want to draw, and call the batch's 
 \f1\fs20 draw()
 \f0\fs24  method.\
 \
@@ -361,7 +377,7 @@ To use the batch with the asteroid sprites, we'll need to pass the batch into th
 \f0\fs24  function, then just add it as a keyword argument to each new sprite:\
 \
 
-\f1\fs20 def asteroids(num_asteroids, player_position, batch):\
+\f1\fs20 def asteroids(num_asteroids, player_position, batch=None):\
     ...\
     new_asteroid = pyglet.sprite.Sprite(img=resources.asteroid_image, \
                                             x=asteroid_x, y=asteroid_y,\
@@ -369,7 +385,7 @@ To use the batch with the asteroid sprites, we'll need to pass the batch into th
 
 \f0\fs24 \
 
-\f1\fs20 asteroids = load.asteroids(3, (player_ship.x, player_ship.y), main_batch)
+\f1\fs20 asteroids = load.asteroids(3, player_ship.position, main_batch)
 \f0\fs24 \
 \
 Now you can replace those five lines of 
@@ -384,8 +400,9 @@ Now when you run
 \f1\fs20 asteroids.py
 \f0\fs24 , it should look exactly the same.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Displaying Little Ship Icons
+\b \cf0 Displaying Little Ship Icons
 \b0 \
 To show how many lives the player has left, we'll need to draw a little row of icons in the upper right corner of the screen. Since we'll be making more than one using the same template, let's create a function called 
 \f1\fs20 player_lives()
@@ -393,12 +410,13 @@ To show how many lives the player has left, we'll need to draw a little row of i
 \f1\fs20 load
 \f0\fs24  module to generate them.\
 \
-The icons should look the same as the player's ship. We could create a scaled version using an image editor, or we could just let pyglet do the scaling.\
+The icons should look the same as the player's ship. We could create a scaled version using an image editor, or we could just let pyglet do the scaling. I don't know about you, but I prefer the option that requires less work.\
 \
-The method for creating the icons is almost exactly the same as the one for creating asteroids. For each icon we just create a sprite, give it a position and scale, and append it to the return list.\
+The function for creating the icons is almost exactly the same as the one for creating asteroids. For each icon we just create a sprite, give it a position and scale, and append it to the return list.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\f1\fs20 def player_lives(num_icons, batch=None):\
+\f1\fs20 \cf0 def player_lives(num_icons, batch=None):\
     player_lives = []\
     for i in range(num_icons):\
         new_sprite = pyglet.sprite.Sprite(img=resources.player_image, \
@@ -409,7 +427,9 @@ The method for creating the icons is almost exactly the same as the one for crea
     return player_lives
 \f0\fs24 \
 \
-The player icon is 50x50 pixels, so half that size will be 25x25. We want to put a little bit of space between each icon, so we create them at 30-pixel intervals starting from the right side of the screen and moving to the left. Note that like the 
+The included player icon is 50x50 pixels, so half that size will be 25x25. We want to put a little bit of space between each icon, so we create them at 30-pixel intervals starting from the right side of the screen and moving to the left. If you are using your own graphics, you may want to change the constants in this function.\
+\
+Note that like the 
 \f1\fs20 asteroids()
 \f0\fs24  function, 
 \f1\fs20 player_lives()
@@ -418,11 +438,9 @@ The player icon is 50x50 pixels, so half that size will be 25x25. We want to put
 \f0\fs24  argument. A 
 \f1\fs20 None
 \f0\fs24  value specifies no batch.\
-\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b\fs48 \
-
-\fs36 \
+\b\fs36 \cf0 \
 Making Things Move
 \b0\fs24 \
 \
@@ -430,8 +448,9 @@ The game would be pretty boring if nothing on the screen ever moved. To achieve 
 \
 
 \b Creating the Basic Motion Class\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 Since every visible object is represented by at least one Sprite, we may as well make our basic motion class a subclass of 
+\b0 \cf0 Since every visible object is represented by at least one Sprite, we may as well make our basic motion class a subclass of 
 \f1\fs20 pyglet.sprite.Sprite
 \f0\fs24 . Another approach would be to have our class inherit from 
 \f1\fs20 object
@@ -455,7 +474,7 @@ Create a new
     def __init__(self, *args, **kwargs):\
         super(PhysicalObject, self).__init__(*args, **kwargs)\
         \
-        self.vx, self.vy = 0.0, 0.0
+        self.velocity_x, self.velocity_y = 0.0, 0.0
 \f0\fs24 \
 \
 Each object will need to be updated every frame, so let's write an 
@@ -464,8 +483,8 @@ Each object will need to be updated every frame, so let's write an
 \
 
 \f1\fs20     def update(self, dt):\
-        self.x += self.vx * dt\
-        self.y += self.vy * dt
+        self.x += self.velocity_x * dt\
+        self.y += self.velocity_y * dt
 \f0\fs24 \
 \
 What's 
@@ -511,7 +530,7 @@ To make the asteroids use our new motion code, just import the
 \f0\fs24 :\
 \
 
-\f1\fs20 def asteroids(num_asteroids, player_position, batch):\
+\f1\fs20 def asteroids(num_asteroids, player_position, batch=None):\
     ...\
         new_asteroid = physicalobject.PhysicalObject(...)\
         new_asteroid.rotation = random.randint(0, 360)\
@@ -520,15 +539,17 @@ To make the asteroids use our new motion code, just import the
     ...
 \f0\fs24 \
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Writing the Game Update Function
+\b \cf0 Writing the Game Update Function
 \b0 \
 To call each object's 
 \f1\fs20 update()
 \f0\fs24  method every frame, we first need to have a list of those objects. For now, we can just declare it after setting up all the other objects:\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\f1\fs20 game_objects = [player_ship] + asteroids
+\f1\fs20 \cf0 game_objects = [player_ship] + asteroids
 \f0\fs24 \
 \
 Now we can write a simple function to iterate over the list:\
@@ -545,8 +566,9 @@ The
 \f1\fs20 dt
 \f0\fs24  parameter because it is still not the source of the actual time step.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Calling the Update Function
+\b \cf0 Calling the Update Function
 \b0 \
 We need to update the objects at least once per frame. What's a frame? Well, most screens have a maximum refresh rate of 60 hertz. If we set our loop to run at exactly 60 hertz, though, the motion will look a little jerky because it won't match the screen exactly. Instead, we should have it update twice as fast, 120 times per second, to get smooth animation.\
 \
@@ -556,8 +578,9 @@ Instead of using an actual loop to update the game every frame, we let pyglet ca
 \f1\fs20 pyglet.clock.schedule_interval()
 \f0\fs24 :\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\f1\fs20 pyglet.clock.schedule_interval(update, 1/120.0)
+\f1\fs20 \cf0 pyglet.clock.schedule_interval(update, 1/120.0)
 \f0\fs24 \
 \
 Putting this line above 
@@ -574,16 +597,18 @@ Now when you run
 \f1\fs20 asteroids.py
 \f0\fs24 , you should see your formerly static asteroids drifting serenely across the screen, reappearing on the other side when they slide off the edge.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Writing the Player Class
+\b \cf0 Writing the Player Class
 \b0 \
 In addition to obeying the basic laws of physics, the player object needs to respond to keyboard input. Start by importing the appropriate modules and subclassing PhysicalObject:\
 \
 from pyglet.window import key\
 import physicalobject, resources\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\f1\fs20 class Player(physicalobject.PhysicalObject):\
+\f1\fs20 \cf0 class Player(physicalobject.PhysicalObject):\
     \
     def __init__(self, *args, **kwargs):\
         super(Player, self).__init__(img=resources.player_image, \
@@ -666,8 +691,8 @@ Pretty simple so far. To rotate the player, we just add the rotation speed to th
             angle_radians = -math.radians(self.rotation)\
             force_x = math.cos(angle_radians) * self.thrust * dt\
             force_y = math.sin(angle_radians) * self.thrust * dt\
-            self.vx += force_x\
-            self.vy += force_y
+            self.velocity_x += force_x\
+            self.velocity_y += force_y
 \f0\fs24 \
 \
 First, we convert the angle to radians so that 
@@ -680,10 +705,12 @@ We now have a complete
 \f1\fs20 Player
 \f0\fs24  class. If we add it to the game and tell pyglet that it's an event handler, we should be good to go.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Integrating the Player Class\
+\b \cf0 Integrating the Player Class\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 The first thing we need to do is make 
+\b0 \cf0 The first thing we need to do is make 
 \f1\fs20 player_ship
 \f0\fs24  an instance of 
 \f1\fs20 Player
@@ -712,13 +739,15 @@ That's it! Now you should be able to run the game and move the player with the a
 
 \b0 In any good game, there needs to be something working against the player. In the case of Asteroids, it's the threat of collision with, well, an asteroid. Collision detection requires a lot of infrastructure in the code, so this section will focus on making it work. We'll also clean up the player class and show some visual feedback for thrusting.
 \b\fs48 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\fs36 \
+\fs36 \cf0 \
 Simplifying Player Input
 \fs24 \
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 Right now, the 
+\b0 \cf0 Right now, the 
 \f1\fs20 Player
 \f0\fs24  class handles all of its own keyboard events. It spends 13 lines of code doing nothing but setting boolean values in a dictionary. One would think that there would be a better way, and there is: 
 \f1\fs20 pyglet.window.key.KeyStateHandler
@@ -770,17 +799,21 @@ It's just that simple. If you need to see a list of key constants, you can check
 \f1\fs20 pyglet.window.key
 \f0\fs24 .\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b\fs36 Adding an Engine Flame
+\b\fs36 \cf0 Adding an Engine Flame
 \fs24 \
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 Without visual feedback, it can be difficult to tell if the ship is actually thrusting forward or not, especially for an observer just watching someone else play the game. One way to provide visual feedback is to show an engine flame behind the player while the player is thrusting.\
+\b0 \cf0 Without visual feedback, it can be difficult to tell if the ship is actually thrusting forward or not, especially for an observer just watching someone else play the game. One way to provide visual feedback is to show an engine flame behind the player while the player is thrusting.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Loading the Frame Image\
+\b \cf0 Loading the Frame Image\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 The player will now be made of two sprites. There's nothing preventing us from letting a 
+\b0 \cf0 The player will now be made of two sprites. There's nothing preventing us from letting a 
 \f1\fs20 Sprite
 \f0\fs24  own another 
 \f1\fs20 Sprite
@@ -813,10 +846,12 @@ Now the image is ready to be used by the player class. If you're still confused 
 \f1\fs20 engine_image
 \f0\fs24 's anchor point when you finish this section.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Creating and Drawing the Flame\
+\b \cf0 Creating and Drawing the Flame\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 The engine sprite needs to be initialized with all the same arguments as 
+\b0 \cf0 The engine sprite needs to be initialized with all the same arguments as 
 \f1\fs20 Player
 \f0\fs24 , except that it needs a different image and must be initially invisible. The code for creating it is very straightforward:\
 \
@@ -853,10 +888,12 @@ To make the sprite appear at the player's position, we also need to update its p
             self.engine_sprite.visible = False
 \f0\fs24 \
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Cleaning Up After Death\
+\b \cf0 Cleaning Up After Death\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 When the player is inevitably smashed to bits by an asteroid, he will disappear from the screen. However, simply removing the 
+\b0 \cf0 When the player is inevitably smashed to bits by an asteroid, he will disappear from the screen. However, simply removing the 
 \f1\fs20 Player
 \f0\fs24  instance from the 
 \f1\fs20 game_objects
@@ -884,19 +921,23 @@ The
 \f1\fs20 Player
 \f0\fs24  class is now cleaned up and ready to go.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b\fs36 Building Up the Infrastructure
+\b\fs36 \cf0 Building Up the Infrastructure
 \fs24 \
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 To make objects disappear from the screen, we'll need to manipulate the 
+\b0 \cf0 To make objects disappear from the screen, we'll need to manipulate the 
 \f1\fs20 game_objects
 \f0\fs24  list. Every object will need to check every other object's position against its own, and each object will have to decide whether or not it should be removed from the list. The game loop will then check for dead objects and remove them from the list.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Checking All Object Pairs\
+\b \cf0 Checking All Object Pairs\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 We need to check every object against every other object. The simplest method is to use nested loops. This method will be inefficient for a large number of objects*, but it will work for our purposes. We can use one easy optimization and avoid checking the same pair of objects twice. Here's the setup for the loops:\
+\b0 \cf0 We need to check every object against every other object. The simplest method is to use nested loops. This method will be inefficient for a large number of objects*, but it will work for our purposes. We can use one easy optimization and avoid checking the same pair of objects twice. Here's the setup for the loops:\
 \
 * A better technique is spatial hashing, but if you reach the point where you need to use that, you should probably be using a C-based physics engine anyway.\
 \
@@ -940,8 +981,9 @@ As you can see, it simply calls the object's
 \f1\fs20 delete()
 \f0\fs24  method to remove it from any batches, then it removes it from the list. If you haven't used list comprehensions much, the above code might look like it's removing objects from the list while traversing it. Fortunately, the list comprehension is evaluated before the loop actually runs, so there should be no problems.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Implementing the Collision Functions
+\b \cf0 Implementing the Collision Functions
 \b0 \
 We need to add three things to the 
 \f1\fs20 PhysicalObject
@@ -959,8 +1001,9 @@ We need to add three things to the
 \f1\fs20 util.py
 \f0\fs24 :\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\f1\fs20 import pyglet, math\
+\f1\fs20 \cf0 import pyglet, math\
 \
 def distance(point_1=(0, 0), point_2=(0, 0)):\
     return math.sqrt((point_1[0]-point_2[0])**2+(point_1[1]-point_2[1])**2)
@@ -1006,22 +1049,26 @@ And that's it! You should be able to zip around the screen, engine blazing away.
 \f1\fs20 game_objects
 \f0\fs24  list during the game, as well as have objects check each others' types to make a decision about whether or not they should die.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b\fs36 Adding Objects During Play
+\b\fs36 \cf0 Adding Objects During Play
 \fs24 \
 \
 How?\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 We handled object removal with a boolean flag. Adding objects will be a little bit more complicated. For one thing, an object can't just say "Add me to the list!" It has to come from somewhere. For another thing, an object might want to add more than one other object at a time.\
+\b0 \cf0 We handled object removal with a boolean flag. Adding objects will be a little bit more complicated. For one thing, an object can't just say "Add me to the list!" It has to come from somewhere. For another thing, an object might want to add more than one other object at a time.\
 \
 There are a few ways to solve this problem. To avoid circular references, keep our constructors nice and short, and avoid adding extra modules, we'll have each object keep a list of new child objects to be added to 
 \f1\fs20 game_objects
 \f0\fs24 .\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Tweaking the Game Loop\
+\b \cf0 Tweaking the Game Loop\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 The simplest way to check objects for children and add those children to the list is to add a single line of code to the 
+\b0 \cf0 The simplest way to check objects for children and add those children to the list is to add a single line of code to the 
 \f1\fs20 game_objects
 \f0\fs24  loop. Note that we haven't implemented the 
 \f1\fs20 new_objects
@@ -1063,10 +1110,12 @@ Declare a
     game_objects.extend(to_add)        
 \f0\fs24 \
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Putting the Attribute in PhysicalObject\
+\b \cf0 Putting the Attribute in PhysicalObject\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 As mentioned before, all we have to do is declare a 
+\b0 \cf0 As mentioned before, all we have to do is declare a 
 \f1\fs20 new_objects
 \f0\fs24  attribute in the 
 \f1\fs20 PhysicalObject
@@ -1085,14 +1134,16 @@ To add a new object, all we have to do is put something in
 \f0\fs24  list, and clear 
 \f1\fs20 new_objects
 \f0\fs24 .\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b\fs36 \
+\b\fs36 \cf0 \
 Adding Bullets
 \fs24 \
 \
 Writing the Bullet Class\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 For the most part, bullets act like any other 
+\b0 \cf0 For the most part, bullets act like any other 
 \f1\fs20 PhysicalObject
 \f0\fs24 , but they have two differences, at least in this game: they only collide with some objects, and they disappear from the screen after a couple of seconds to prevent the player from flooding the screen with bullets.\
 \
@@ -1139,10 +1190,12 @@ There's still more work to be done on the
 \f1\fs20 Bullet
 \f0\fs24  class, but before we do any more work on the class itself, let's get them on the screen.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Firing Bullets\
+\b \cf0 Firing Bullets\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 The 
+\b0 \cf0 The 
 \f1\fs20 Player
 \f0\fs24  class will be the only class that fires bullets, so let's open it up, import the 
 \f1\fs20 bullet
@@ -1194,8 +1247,8 @@ Next, calculate the bullet's position and instantiate it:\
 Set its velocity using almost the same equations:\
 \
 
-\f1\fs20         bullet_vx = self.vx + math.cos(angle_radians) * self.bullet_speed\
-        bullet_vy = self.vy + math.sin(angle_radians) * self.bullet_speed\
+\f1\fs20         bullet_vx = self.velocity_x + math.cos(angle_radians) * self.bullet_speed\
+        bullet_vy = self.velocity_y + math.sin(angle_radians) * self.bullet_speed\
         new_bullet.vx, new_bullet.vy = bullet_vx, bullet_vy
 \f0\fs24 \
 \
@@ -1213,12 +1266,14 @@ At this point, you should be able to fire bullets using the space bar, and aster
 \f1\fs20 handle_collision_with()
 \f0\fs24  method.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b\fs36 Customizing Collision Behavior
+\b\fs36 \cf0 Customizing Collision Behavior
 \fs24 \
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 There are five kinds of collisions in the current version of the game: bullet-asteroid, bullet-player, asteroid-player, bullet-bullet, and asteroid-asteroid. There would be many more in a more complex game.\
+\b0 \cf0 There are five kinds of collisions in the current version of the game: bullet-asteroid, bullet-player, asteroid-player, bullet-bullet, and asteroid-asteroid. There would be many more in a more complex game.\
 \
 In general, objects of the same type should not be destroyed when they collide, so we can generalize that behavior in 
 \f1\fs20 PhysicalObject
@@ -1239,10 +1294,12 @@ Letting Twins Ignore Each Other\
             self.dead = True
 \f0\fs24 \
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Customizing Bullet Collisions\
+\b \cf0 Customizing Bullet Collisions\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 Since bullet collision behavior can vary so wildly across objects, let's add a 
+\b0 \cf0 Since bullet collision behavior can vary so wildly across objects, let's add a 
 \f1\fs20 reacts_to_bullets
 \f0\fs24  attribute to 
 \f1\fs20 PhysicalObjects
@@ -1285,21 +1342,25 @@ The
 \f1\fs20 Bullet
 \f0\fs24  class is now completely finished! Now let's make something happen when a bullet hits an asteroid.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b\fs36 Making Asteroids Explode
+\b\fs36 \cf0 Making Asteroids Explode
 \fs24 \
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 Asteroids is challenging to players because every time you shoot an asteroid, it turns into more asteroids. We need to mimic that behavior if we want our game to be any fun. We've already done most of the hard parts. All that remains is to make another subclass of 
+\b0 \cf0 Asteroids is challenging to players because every time you shoot an asteroid, it turns into more asteroids. We need to mimic that behavior if we want our game to be any fun. We've already done most of the hard parts. All that remains is to make another subclass of 
 \f1\fs20 PhysicalObject
 \f0\fs24  and write a custom 
 \f1\fs20 handle_collision_with()
 \f0\fs24  method, along with a couple of maintenance tweaks.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b Writing the Asteroid Class\
+\b \cf0 Writing the Asteroid Class\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 Create a new module called 
+\b0 \cf0 Create a new module called 
 \f1\fs20 asteroid.py
 \f0\fs24 . Write the usual constructor to pass a specific image to the superclass, passing along any other parameters.\
 \
@@ -1328,8 +1389,8 @@ Now we can say that if it's supposed to die, and it's big enough, then we should
             for i in xrange(num_asteroids):\
                 new_asteroid = Asteroid(x=self.x, y=self.y, batch=self.batch)\
                 new_asteroid.rotation = random.randint(0, 360)\
-                new_asteroid.vx = random.random()*70 + self.vx\
-                new_asteroid.vy = random.random()*70 + self.vy\
+                new_asteroid.vx = random.random()*70 + self.velocity_x\
+                new_asteroid.vy = random.random()*70 + self.velocity_y\
                 new_asteroid.scale = self.scale * 0.5\
                 self.new_objects.append(new_asteroid)
 \f0\fs24 \
@@ -1369,7 +1430,7 @@ The only thing left is for us to change the code to create the asteroids when th
 \f0\fs24 .\
 \
 
-\f1\fs20 def asteroids(num_asteroids, player_position, batch):\
+\f1\fs20 def asteroids(num_asteroids, player_position, batch=None):\
     ...\
     for i in range(num_asteroids):\
         ...\
@@ -1389,10 +1450,12 @@ Now we're looking at something resembling a game. There are just a few more thin
 \f1\fs20 game_objects
 \f0\fs24  list during the game, as well as have objects check each others' types to make a decision about whether or not they should die.\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b\fs36 Adding Objects During Play
+\b\fs36 \cf0 Adding Objects During Play
 \fs24 \
 \
 How?\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\b0 We handled object removal with a boolean flag. Adding objects will be a little bit more }
+\b0 \cf0 We handled object removal with a boolean flag. Adding objects will be a little bit more }
