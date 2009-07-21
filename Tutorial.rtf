@@ -750,16 +750,14 @@ To start using it, we need to initialize it and push it onto the event stack ins
 \f0\fs24 's constructor:\
 \
 
-\f1\fs20         self.key_handler = pyglet.window.key.KeyStateHandler()
+\f1\fs20         self.key_handler = key.KeyStateHandler()
 \f0\fs24 \
 \
 We also need to push the 
 \f1\fs20 key_handler
-\f0\fs24  object onto the event stack instead of the 
-\f1\fs20 Player
-\f0\fs24  in 
-\f1\fs20 asteroids.py
-\f0\fs24 :\
+\f0\fs24  object onto the event stack. Keep pushing the 
+\f1\fs20 player_ship
+\f0\fs24  object in addition to its key handler, because we'll need it to keep handling key press and release events later.\
 \
 
 \f1\fs20 game_window.push_handlers(player_ship.key_handler)
@@ -785,7 +783,11 @@ Since
             ...
 \f0\fs24 \
 \
-It's just that simple. If you need to see a list of key constants, you can check the API documentation under 
+Now we can remove the 
+\f1\fs20 on_key_press()
+\f0\fs24  and 
+\f1\fs20 on_key_release()
+\f0\fs24  methods from the class. It's just that simple. If you need to see a list of key constants, you can check the API documentation under 
 \f1\fs20 pyglet.window.key
 \f0\fs24 .\
 \
@@ -817,7 +819,7 @@ To make the flame draw in the correct position, we could either do some complica
 \f1\fs20 engine_image = pyglet.resource.image("engine_flame.png")
 \f0\fs24 \
 \
-To get the flame to draw behind the player, we need to move the flame image's center to the right, past the end of the image. To do that, we just set its 
+To get the flame to draw behind the player, we need to move the flame image's center of rotation to the right, past the end of the image. To do that, we just set its 
 \f1\fs20 anchor_x
 \f0\fs24  and 
 \f1\fs20 anchor_y
@@ -837,7 +839,9 @@ Now the image is ready to be used by the player class. If you're still confused 
 
 \b0 The engine sprite needs to be initialized with all the same arguments as 
 \f1\fs20 Player
-\f0\fs24 , except that it needs a different image and must be initially invisible. The code for creating it is very straightforward:\
+\f0\fs24 , except that it needs a different image and must be initially invisible. The code for creating it belongs in 
+\f1\fs20 Player.__init__()
+\f0\fs24  and is very straightforward:\
 \
 
 \f1\fs20         self.engine_sprite = pyglet.sprite.Sprite(img=resources.engine_image, \
@@ -915,7 +919,9 @@ The
 
 \b Checking All Object Pairs\
 
-\b0 We need to check every object against every other object. The simplest method is to use nested loops. This method will be inefficient for a large number of objects*, but it will work for our purposes. We can use one easy optimization and avoid checking the same pair of objects twice. Here's the setup for the loops:\
+\b0 We need to check every object against every other object. The simplest method is to use nested loops. This method will be inefficient for a large number of objects*, but it will work for our purposes. We can use one easy optimization and avoid checking the same pair of objects twice. Here's the setup for the loops, which belongs in 
+\f1\fs20 update()
+\f0\fs24 . It simply iterates over all object pairs without doing anything.\
 \
 * A better technique is spatial hashing, but if you reach the point where you need to use that, you should probably be using a C-based physics engine anyway.\
 \
@@ -928,7 +934,7 @@ The
 \
 We'll need a way to check if an object has already been killed. We could go over to 
 \f1\fs20 PhysicalObject
-\f0\fs24  right now and put it in, but let's keep working on the game loop and implement the attribute in the class later. For now, we'll just assume that everything in 
+\f0\fs24  right now and put it in, but let's keep working on the game loop and implement the method later. For now, we'll just assume that everything in 
 \f1\fs20 game_objects
 \f0\fs24  has a 
 \f1\fs20 dead
@@ -947,10 +953,12 @@ To perform the actual check, we'll also need to call two more methods that don't
                     obj_2.handle_collision_with(obj_1)
 \f0\fs24 \
 \
-Now all that remains is for us to go through the list and remove dead objects. The code to do that is also simple:\
+Now all that remains is for us to go through the list and remove dead objects:\
 \
 
-\f1\fs20     for to_remove in [obj for obj in game_objects if obj.dead]:\
+\f1\fs20     ...update game objects...\
+    \
+    for to_remove in [obj for obj in game_objects if obj.dead]:\
         to_remove.delete()\
         game_objects.remove(to_remove)
 \f0\fs24 \
@@ -974,7 +982,9 @@ We need to add three things to the
 \f1\fs20 collides_with()
 \f0\fs24  method will need to use the 
 \f1\fs20 distance()
-\f0\fs24  function, so let's start by moving that function into its own module, called 
+\f0\fs24  function, so let's start by moving that function into its own submodule of 
+\f1\fs20 game
+\f0\fs24 , called 
 \f1\fs20 util.py
 \f0\fs24 :\
 \
@@ -985,8 +995,8 @@ def distance(point_1=(0, 0), point_2=(0, 0)):\
     return math.sqrt((point_1[0]-point_2[0])**2+(point_1[1]-point_2[1])**2)
 \f0\fs24 \
 \
-Remember to 
-\f1\fs20 import util
+Remember to call 
+\f1\fs20 from util import distance
 \f0\fs24  in 
 \f1\fs20 load.py
 \f0\fs24 . Now we can write 
@@ -1014,6 +1024,12 @@ The collision handler function is even simpler, since for now we just want every
         self.dead = True
 \f0\fs24 \
 \
+One last thing: set 
+\f1\fs20 self.dead = False
+\f0\fs24  in 
+\f1\fs20 PhysicalObject.__init__()
+\f0\fs24 .\
+\
 And that's it! You should be able to zip around the screen, engine blazing away. If you hit something, both you and the thing you collided with should disappear from the screen. There's still no game, but we are clearly making progress.\
 \
 
@@ -1040,9 +1056,9 @@ There are a few ways to solve this problem. To avoid circular references, keep o
 
 \b Tweaking the Game Loop\
 
-\b0 The simplest way to check objects for children and add those children to the list is to add a single line of code to the 
+\b0 The simplest way to check objects for children and add those children to the list is to add two lines of code to the 
 \f1\fs20 game_objects
-\f0\fs24  loop. Note that we haven't implemented the 
+\f0\fs24  loop. We haven't implemented the 
 \f1\fs20 new_objects
 \f0\fs24  attribute yet, but when we do, it will be a list of objects to add.\
 \
@@ -1115,18 +1131,19 @@ Writing the Bullet Class\
 \f1\fs20 PhysicalObject
 \f0\fs24 , but they have two differences, at least in this game: they only collide with some objects, and they disappear from the screen after a couple of seconds to prevent the player from flooding the screen with bullets.\
 \
-First, make a new module called 
+First, make a new submodule of 
+\f1\fs20 game
+\f0\fs24  called 
 \f1\fs20 bullet.py
 \f0\fs24  and start a simple subclass of 
 \f1\fs20 PhysicalObject
-\f0\fs24 . Don't forget to import 
-\f1\fs20 physicalobject
-\f0\fs24  and 
-\f1\fs20 resources
 \f0\fs24 .\
 \
 
-\f1\fs20 class Bullet(physicalobject.PhysicalObject):\
+\f1\fs20 import pyglet\
+import physicalobject, resources\
+\
+class Bullet(physicalobject.PhysicalObject):\
     """Bullets fired by the player"""\
     \
     def __init__(self, *args, **kwargs):\
@@ -1167,7 +1184,7 @@ There's still more work to be done on the
 \f1\fs20 bullet
 \f0\fs24  module, and add a 
 \f1\fs20 bullet_speed
-\f0\fs24  attribute in its constructor:\
+\f0\fs24  attribute to its constructor:\
 \
 
 \f1\fs20 ...\
@@ -1228,7 +1245,7 @@ Finally, add it to the
 \f1\fs20         self.new_objects.append(new_bullet)
 \f0\fs24 \
 \
-At this point, you should be able to fire bullets using the space bar, and asteroids should disappear when hit. There's just one problem: if you manage to shoot yourself through some clever (or accidental) maneuvering, you'll disappear too. You may  have noticed earlier that asteroids also disappear when they touch each other. To fix this problem, we'll need to start customizing each class's 
+At this point, you should be able to fire bullets out of the front of your ship. There's just one problem: as soon as you fire, your ship disappears. You may  have noticed earlier that asteroids also disappear when they touch each other. To fix this problem, we'll need to start customizing each class's 
 \f1\fs20 handle_collision_with()
 \f0\fs24  method.\
 \
@@ -1267,7 +1284,9 @@ Letting Twins Ignore Each Other\
 \f1\fs20 PhysicalObjects
 \f0\fs24  which the 
 \f1\fs20 Bullet
-\f0\fs24  class can check to determine if it should register a collision or not.\
+\f0\fs24  class can check to determine if it should register a collision or not. We should also add an 
+\f1\fs20 is_bullet
+\f0\fs24  attribute so we can check the collision properly from both objects.\
 \
 First, initialize the 
 \f1\fs20 reacts_to_bullets
@@ -1278,13 +1297,22 @@ First, initialize the
 \f0\fs24  constructor.\
 \
 
+\f1\fs20 class PhysicalObject(pyglet.sprite.Sprite):
+\f0\fs24 \
+
 \f1\fs20     def __init__(self, *args, **kwargs):\
         ...\
         self.reacts_to_bullets = True\
-        ...
+        self.is_bullet = False\
+        ...\
+\
+class Bullet(physicalobject.PhysicalObject):\
+    def __init__(self, *args, **kwargs):\
+        ...\
+        self.is_bullet = True
 \f0\fs24 \
 \
-Now override the 
+Then, override the 
 \f1\fs20 Bullet.collides_with()
 \f0\fs24  method to only call the 
 \f1\fs20 PhysicalObject
@@ -1300,9 +1328,24 @@ Now override the
             return super(Bullet, self).collides_with(other_object)
 \f0\fs24 \
 \
-The 
+Insert a bit of code in 
+\f1\fs20 PhysicalObject.collides_with()
+\f0\fs24  to ignore bullets under the right circumstances:\
+\
+
+\f1\fs20     def collides_with(self, other_object):\
+        if not self.reacts_to_bullets and other_object.is_bullet:\
+            return False\
+        ...
+\f0\fs24 \
+\
+Finally, set 
+\f1\fs20 self.reacts_to_bullets = False
+\f0\fs24  in 
+\f1\fs20 Player.__init__()
+\f0\fs24 . The 
 \f1\fs20 Bullet
-\f0\fs24  class is now completely finished! Now let's make something happen when a bullet hits an asteroid.\
+\f0\fs24  class is completely finished! Now let's make something happen when a bullet hits an asteroid.\
 \
 
 \b\fs36 Making Asteroids Explode
@@ -1318,10 +1361,17 @@ The
 
 \b Writing the Asteroid Class\
 
-\b0 Create a new module called 
+\b0 Create a new submodule of 
+\f1\fs20 game
+\f0\fs24  called 
 \f1\fs20 asteroid.py
 \f0\fs24 . Write the usual constructor to pass a specific image to the superclass, passing along any other parameters.\
 \
+
+\f1\fs20 import pyglet\
+import resources, physicalobject\
+
+\f0\fs24 \
 
 \f1\fs20 class Asteroid(physicalobject.PhysicalObject):\
     def __init__(self, *args, **kwargs):\
@@ -1342,7 +1392,9 @@ We want to keep the old behavior of ignoring other asteroids, so start the metho
 Now we can say that if it's supposed to die, and it's big enough, then we should create two or three new asteroids with random rotations and velocities. We should add the old asteroid's velocity to the new ones to make it look like they come from the same object.\
 \
 
-\f1\fs20         if self.dead and self.scale > 0.25:\
+\f1\fs20 import random\
+...\
+        if self.dead and self.scale > 0.25:\
             num_asteroids = random.randint(2, 3)\
             for i in xrange(num_asteroids):\
                 new_asteroid = Asteroid(x=self.x, y=self.y, batch=self.batch)\
@@ -1377,7 +1429,7 @@ Then write the
         self.rotation += self.rotate_speed * dt
 \f0\fs24 \
 \
-The only thing left is for us to change the code to create the asteroids when the game starts. Go over to 
+The last thing we need to do is go over to 
 \f1\fs20 load.py
 \f0\fs24  and have the 
 \f1\fs20 asteroid()
@@ -1387,6 +1439,10 @@ The only thing left is for us to change the code to create the asteroids when th
 \f1\fs20 PhysicalObject
 \f0\fs24 .\
 \
+
+\f1\fs20 import asteroid\
+
+\f0\fs24 \
 
 \f1\fs20 def asteroids(num_asteroids, player_position, batch=None):\
     ...\
@@ -1404,14 +1460,4 @@ Now we're looking at something resembling a game. There are just a few more thin
 \fs24 \
 \
 
-\b0 In this section, we'll add bullets. This new feature will require us to start adding things to the 
-\f1\fs20 game_objects
-\f0\fs24  list during the game, as well as have objects check each others' types to make a decision about whether or not they should die.\
-\
-
-\b\fs36 Adding Objects During Play
-\fs24 \
-\
-How?\
-
-\b0 We handled object removal with a boolean flag. Adding objects will be a little bit more }
+\b0 Unfinished, sorry...}

@@ -17,7 +17,7 @@ class Player(physicalobject.PhysicalObject):
         self.rotate_speed = 200.0
         
         # Let pyglet handle keyboard events for us
-        self.key_handler = pyglet.window.key.KeyStateHandler()
+        self.key_handler = key.KeyStateHandler()
     
     def update(self, dt):
         # Do all the normal physics stuff

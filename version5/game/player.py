@@ -21,7 +21,7 @@ class Player(physicalobject.PhysicalObject):
         self.reacts_to_bullets = False
         
         # Tell the game handler about any event handlers
-        self.key_handler = pyglet.window.key.KeyStateHandler()
+        self.key_handler = key.KeyStateHandler()
         self.event_handlers = [self, self.key_handler]
     
     def update(self, dt):
@@ -74,10 +74,6 @@ class Player(physicalobject.PhysicalObject):
         
         # Play the bullet sound
         resources.bullet_sound.play()
-    
-    def collides_with(self, other_object):
-        if isinstance(other_object, bullet.Bullet): return False
-        return super(Player, self).collides_with(other_object)
     
     def delete(self):
         # We have a child sprite which must be deleted when this object

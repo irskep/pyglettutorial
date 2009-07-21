@@ -10,8 +10,9 @@ class PhysicalObject(pyglet.sprite.Sprite):
         # Velocity
         self.velocity_x, self.velocity_y = 0.0, 0.0
         
-        # Flag to toggle collision with bullets
+        # Flags to toggle collision with bullets
         self.reacts_to_bullets = True
+        self.is_bullet = False
         
         # Flag to remove this object from the game_object list
         self.dead = False
@@ -50,6 +51,10 @@ class PhysicalObject(pyglet.sprite.Sprite):
 
     def collides_with(self, other_object):
         """Determine if this object collides with another"""
+        
+        # Ignore bullet collisions if we're supposed to
+        if not self.reacts_to_bullets and other_object.is_bullet:
+            return False
         
         # Calculate distance between object centers that would be a collision,
         # assuming square resources

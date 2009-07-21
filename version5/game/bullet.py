@@ -9,6 +9,9 @@ class Bullet(physicalobject.PhysicalObject):
         
         # Bullets shouldn't stick around forever
         pyglet.clock.schedule_once(self.die, 0.5)
+        
+        # Flag as a bullet
+        self.is_bullet = True
     
     def die(self, dt):
         self.dead = True
