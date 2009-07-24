@@ -253,12 +253,12 @@ def asteroids(num_asteroids):\
     return asteroids
 \f0\fs24 \
 \
-All we are doing here is making a few new sprites with random positions. There's still a problem, though: an asteroid might randomly be placed exactly where the player is, causing immediate death. To fix this issue, we'll need to be able to tell how far away new asteroids are from the player. Here is a simple function to calculate that distance, which requires you to import the 
-\f1\fs20 math
-\f0\fs24  module:\
+All we are doing here is making a few new sprites with random positions. There's still a problem, though: an asteroid might randomly be placed exactly where the player is, causing immediate death. To fix this issue, we'll need to be able to tell how far away new asteroids are from the player. Here is a simple function to calculate that distance:\
 \
 
-\f1\fs20 def distance(point_1=(0, 0), point_2=(0, 0)):\
+\f1\fs20 import math\
+...\
+def distance(point_1=(0, 0), point_2=(0, 0)):\
     """Returns the distance between two points"""\
     return math.sqrt((point_1[0]-point_2[0])**2+(point_1[1]-point_2[1])**2)
 \f0\fs24 \
@@ -418,11 +418,8 @@ The player icon is 50x50 pixels, so half that size will be 25x25. We want to put
 \f0\fs24  argument. A 
 \f1\fs20 None
 \f0\fs24  value specifies no batch.\
-\
 
-\b\fs48 \
-
-\fs36 \
+\b\fs36 \
 Making Things Move
 \b0\fs24 \
 \
@@ -799,7 +796,7 @@ Now we can remove the
 \b0 Without visual feedback, it can be difficult to tell if the ship is actually thrusting forward or not, especially for an observer just watching someone else play the game. One way to provide visual feedback is to show an engine flame behind the player while the player is thrusting.\
 \
 
-\b Loading the Frame Image\
+\b Loading the Flame Image\
 
 \b0 The player will now be made of two sprites. There's nothing preventing us from letting a 
 \f1\fs20 Sprite
@@ -908,7 +905,7 @@ The
 \f0\fs24  class is now cleaned up and ready to go.\
 \
 
-\b\fs36 Building Up the Infrastructure
+\b\fs36 Checking For Collisions
 \fs24 \
 \
 
@@ -1312,29 +1309,15 @@ class Bullet(physicalobject.PhysicalObject):\
         self.is_bullet = True
 \f0\fs24 \
 \
-Then, override the 
-\f1\fs20 Bullet.collides_with()
-\f0\fs24  method to only call the 
-\f1\fs20 PhysicalObject
-\f0\fs24  class's 
-\f1\fs20 collides_with()
-\f0\fs24  method if the other object reacts to bullets.\
-\
-
-\f1\fs20     def collides_with(self, other_object):\
-        if not other_object.reacts_to_bullets:\
-            return False\
-        else:\
-            return super(Bullet, self).collides_with(other_object)
-\f0\fs24 \
-\
-Insert a bit of code in 
+Then, insert a bit of code in 
 \f1\fs20 PhysicalObject.collides_with()
 \f0\fs24  to ignore bullets under the right circumstances:\
 \
 
 \f1\fs20     def collides_with(self, other_object):\
         if not self.reacts_to_bullets and other_object.is_bullet:\
+            return False\
+        if self.is_bullet and not other_object.reacts_to_bullets:\
             return False\
         ...
 \f0\fs24 \

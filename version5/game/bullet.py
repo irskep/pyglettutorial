@@ -16,11 +16,3 @@ class Bullet(physicalobject.PhysicalObject):
     def die(self, dt):
         self.dead = True
     
-    def collides_with(self, other_object):
-        """Special collision method, returns False if other_object doesn't care about bullets"""
-        
-        if not other_object.reacts_to_bullets:
-            return False
-        else:
-            return super(Bullet, self).collides_with(other_object)
-    

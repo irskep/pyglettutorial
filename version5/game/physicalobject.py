@@ -55,6 +55,8 @@ class PhysicalObject(pyglet.sprite.Sprite):
         # Ignore bullet collisions if we're supposed to
         if not self.reacts_to_bullets and other_object.is_bullet:
             return False
+        if self.is_bullet and not other_object.reacts_to_bullets:
+            return False
         
         # Calculate distance between object centers that would be a collision,
         # assuming square resources
